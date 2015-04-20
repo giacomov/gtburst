@@ -64,7 +64,7 @@ def findIsotropicTemplate(irfname):
 pass
 
 def findTemplate(options):
-  templates                   = options.split(",")
+  templates                   = options.replace(" ","").split(",")
   foundTemplate               = None
   envvar                      = os.environ.get("FERMI_DIR")
   publicTools                 = True
@@ -105,7 +105,7 @@ def findTemplate(options):
   pass
   
   #If we are here no template has been found
-  print("\nI was looking into %s\n" %(path))
+  print("\nI was looking for %s into %s\n" %(path))
   return None
 pass
 
