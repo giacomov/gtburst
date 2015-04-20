@@ -580,7 +580,7 @@ class GUI(object):
     toolsmenu.add_command(label="Make navigation plots (you need to load either LLE or standard LAT data)",
                           command=self.makeNavigationPlots) 
     updatemenu                = Menu(menubar,tearoff=0)
-    updatemenu.add_command(label="Update to the last development version...",command=self.updateGtBurst)
+    updatemenu.add_command(label="Update to the latest version",command=self.updateGtBurst)
     
     menubar.add_cascade(label="File",menu=filemenu)
     menubar.add_cascade(label="Tasks",menu=self.tasksmenu)
