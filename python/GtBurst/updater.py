@@ -9,21 +9,39 @@ import md5
 import socket
 socket.setdefaulttimeout(60)
 
+remoteUrl = 'https://raw.githubusercontent.com/giacomov/gtburst/master/'
+
 def update(debug=False):
+  
+  print("Searching updates at %s..." %(remoteUrl))
+  
   #Download file_list file
+  
   try:
+  
     os.remove("__file_list")
+  
   except:
+  
     pass
+  
   urllib.urlcleanup()
+  
   try:
-    urllib.urlretrieve("http://sourceforge.net/projects/gtburst/files/Stable/__file_list/download","__file_list")
+  
+    urllib.urlretrieve("%s/__file_list" % remoteUrl, "__file_list")
+  
   except socket.timeout:
-    raise GtBurstException(11,"Time out when connecting to Sourceforge. Check your internet connection, or that you can access http://sourceforge.net/projects/gtburst/files/, then retry")
+  
+    raise GtBurstException(11,"Time out when connecting to %s. Check your internet connection, then retry" % (remoteUrl))
+  
   except:
-    raise GtBurstException(1,"Problems with the download. Check your connection, and that you can reach http://sourceforge.net/projects/gtburst/files/, then retry")
+  
+    raise GtBurstException(1,"Problems with the download. Check your connection, and that you can reach %s" %(remoteUrl))
+  
   pass
   
+  #Read the list of files
   f                           = open('__file_list')
   files                       = f.readlines()
   f.close()
@@ -80,10 +98,10 @@ pass
 
 def downloadFile(remotepathname,localpathname):
   try:
-    urllib.urlretrieve("http://sourceforge.net/projects/gtburst/files/Stable/%s/download" % remotepathname,localpathname)
+    urllib.urlretrieve("%s/%s" % (remoteUrl, remotepathname),localpathname)
   except socket.timeout:
-    raise GtBurstException(11,"Time out when connecting to Sourceforge. Check your internet connection, or that you can access http://sourceforge.net/projects/gtburst/files/, then retry")
+    raise GtBurstException(11,"Time out. Check your internet connection, and that you can access %s, then retry" % (remoteUrl))
   except:
-    raise GtBurstException(1,"Problems with the download. Check your connection, and that you can reach http://sourceforge.net/projects/gtburst/files/, then retry")
+    raise GtBurstException(1,"Problems with the download. Check your connection, and that you can reach %s, then retry" %(remoteUrl))
   pass
   
