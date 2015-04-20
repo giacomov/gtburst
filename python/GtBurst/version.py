@@ -1,7 +1,7 @@
 version = "02-01-00"
 
 #DO NOT EDIT BY HAND!!
-patch =10
+patch =11
 
 packageName = 'pyBurstAnalysisGUI'
 
