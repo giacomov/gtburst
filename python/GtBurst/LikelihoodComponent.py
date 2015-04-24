@@ -105,7 +105,7 @@ def findTemplate(options):
   pass
   
   #If we are here no template has been found
-  print("\nI was looking for %s into %s\n" %(path))
+  print("\nI was looking for %s into %s\n" %(",".join(templates), path))
   return None
 pass
 
