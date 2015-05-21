@@ -2,6 +2,7 @@
 
 import urllib, os
 from GtBurst.GtBurstException import GtBurstException
+from GtBurst import getDataPath
 import GtBurst
 import md5
 
@@ -51,6 +52,8 @@ def update(debug=False):
   path                      = GtBurst.__file__
   installationPath          = os.path.join(os.path.sep.join(path.split(os.path.sep)[0:-3]))
   
+  dataPath                  = getDataPath.getDataPath()
+  
   nUpdates                  = 0
   for ff in files:
     atoms                     = ff.split()
@@ -63,9 +66,21 @@ def update(debug=False):
       if(debug):
         print("File %s has remote MD5 checksum %s" %(pathname,remoteMD5))
       
-      #Get the MD5 of the same file in the GtBurst package path
+      #Check if the file exists in the local installation
       pathnameThisSys         = pathname.replace("/",os.path.sep)
-      localPath               = os.path.join(installationPath,pathnameThisSys)
+      
+      if(pathname.find("data")==0):
+        
+        #This is a data file
+        localPath             = os.path.join(dataPath,pathnameThisSys.replace("data%s" % (os.path.sep),""))
+      
+      else:
+      
+        #This is some other file
+        localPath             = os.path.join(installationPath,pathnameThisSys)
+      
+      pass
+      
       if(not os.path.exists(localPath)):
         print("File %s does not exist in the current installation. Creating it..." %(localPath))
         #If the new file is in a new directory, the directory needs to be created
