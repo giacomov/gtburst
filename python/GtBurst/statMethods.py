@@ -10,6 +10,8 @@ from GtApp import GtApp
 import scipy.optimize
 import warnings
 
+from GtBurst.GtBurstException import GtBurstException
+
 #This is to speed up
 log                           = numpy.log
 
@@ -301,7 +303,8 @@ class Polynomial(object):
     #Check that the covariance matrix is positive-defined
     negativeElements          = (numpy.matrix.diagonal(self.covMatrix) < 0)
     if(len(negativeElements.nonzero()[0]) > 0):
-      raise RuntimeError("Negative element in the diagonal of the covariance matrix. Try to reduce the polynomial grade.")
+      raise GtBurstException(8, "The background fit has failed. Select one interval before the transient and one after, as close as possible "+
+                                "to respectively the beginning and the end of the transient, and few hundreds seconds in duration.")
   pass  
   
   def getCovarianceMatrix(self):
