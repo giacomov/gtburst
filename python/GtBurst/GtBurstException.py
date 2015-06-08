@@ -40,6 +40,8 @@ codes[61] = "No Galactic template for selected class"
 
 codes[7] = "The provided irf is not supported by the Background Estimator"
 
+codes[8] = "Background fit did not converge"
+
 class GtBurstException(RuntimeError):
   def __init__(self,code,message):
     RuntimeError.__init__(self,message)
