@@ -1132,13 +1132,19 @@ class LATData(LLEData):
     
   pass
   
-  def performStandardCut(self,ra,dec,rad,irf,tstart,tstop,emin,emax,zenithCut,thetaCut=180.0,gtmktime=True,roicut=True,**kwargs):
+  def performStandardCut(self,ra,dec,rad,irf,tstart,tstop,
+                              emin,emax,zenithCut,
+                              thetaCut=180.0,gtmktime=True,
+                              roicut=True,**kwargs):
+      
       self.strategy                    = 'time'
+      self.evtype                      = 3
       
       for key in kwargs.keys():
         if(key=="strategy"):
           self.strategy                = kwargs[key]
-        pass
+        elif(key=="evtype"):
+          self.evtype                  = int(kwargs[key])
       pass
       
       #Get tstart and tstop always in MET
@@ -1239,6 +1245,14 @@ class LATData(LLEData):
       self.gtselect['evclass']         = irf.evclass
       self.gtselect['evclsmin']        = 0
       self.gtselect['evclsmax']        = 1000
+      
+      #This try/except is to preserve compatibility with the
+      #old science tools, which didn't have the evtype parameter
+      try:
+        self.gtselect['evtype']         = self.evtype
+      except:
+        pass
+            
       self.gtselect['convtype']        = -1
       self.gtselect['clobber']         = "yes"
       outfileselect                    = "%s_filt.fit" %(self.rootName)
@@ -1260,6 +1274,7 @@ class LATData(LLEData):
       f[0].header.set('_EMAX',"%s" % float(emax))
       f[0].header.set('_ZMAX',"%12.5f" % float(zenithCut))
       f[0].header.set('_STRATEG',self.strategy)
+      f[0].header.set('_EVTYPE',self.evtype)
       f[0].header.set('_IRF',"%s" % irf.name)
       f[0].header.set('_REPROC','%s' % reprocessingVersion)
       
@@ -1287,6 +1302,7 @@ class LATData(LLEData):
       self.strategy                 = str(h['_STRATEG'])
       self.irf                      = str(h['_IRF'])
       self.reprocessingVersion      = str(h['_REPROC'])
+      self.evtype                   = int(h['_EVTYPE'])
       f.close()
   pass
   
@@ -1399,6 +1415,14 @@ class LATData(LLEData):
      outfileexpo                    = "%s_expomap.fit" %(self.rootName)
      self.gtexpmap['outfile']       = outfileexpo
      self.gtexpmap['irfs']          = self.irf
+     
+     #This try/except is to preserve compatibility with the
+     #old science tools, which didn't have the evtype parameter
+     try:
+       self.gtexpmap['evtype']         = self.evtype
+     except:
+       pass
+     
      self.gtexpmap['srcrad']        = (2*self.rad)
      #Guarantee that this is divisible by 4
      self.gtexpmap['nlong']         = 4*int(math.ceil(4*self.rad/binsz/4.0))
@@ -1435,6 +1459,14 @@ class LATData(LLEData):
      outfileexpo                    = "%s_binExpMap.fit" %(self.rootName)
      self.gtexpcube2['outfile']     = outfileexpo
      self.gtexpcube2['irfs']        = self.irf
+     
+     #This try/except is to preserve compatibility with the
+     #old science tools, which didn't have the evtype parameter
+     try:
+       self.gtexpcube2['evtype']         = self.evtype
+     except:
+       pass
+     
      self.gtexpcube2['clobber']     = 'yes'
      #All other parameters will be taken from the livetime cube
      try:
@@ -1451,6 +1483,14 @@ class LATData(LLEData):
      self.gtsrcmaps['cmap']         = self.skyCube
      self.gtsrcmaps['srcmdl']       = xml
      self.gtsrcmaps['irfs']         = self.irf
+     
+     #This try/except is to preserve compatibility with the
+     #old science tools, which didn't have the evtype parameter
+     try:
+       self.gtsrcmaps['evtype']         = self.evtype
+     except:
+       pass
+     
      self.gtsrcmaps['bexpmap']      = self.binnedExpoMap
      outfilesrcmap                  = "%s_srcMap.fit" %(self.rootName)
      self.gtsrcmaps['outfile']      = outfilesrcmap
@@ -1480,6 +1520,14 @@ class LATData(LLEData):
      outfilemodelmap                = "%s_modelMap.fit" %(self.rootName)
      self.gtmodel['outfile']        = outfilemodelmap
      self.gtmodel['irfs']           = self.irf
+     
+     #This try/except is to preserve compatibility with the
+     #old science tools, which didn't have the evtype parameter
+     try:
+       self.gtmodel['evtype']         = self.evtype
+     except:
+       pass
+     
      self.gtmodel['expcube']        = self.livetimeCube
      self.gtmodel['bexpmap']        = self.binnedExpoMap
      self.gtmodel['clobber']        = 'yes'
@@ -1498,6 +1546,14 @@ class LATData(LLEData):
      self.gtdiffrsp['scfile']       = self.ft2File
      self.gtdiffrsp['srcmdl']       = xmlmodel
      self.gtdiffrsp['irfs']         = self.irf
+     
+     #This try/except is to preserve compatibility with the
+     #old science tools, which didn't have the evtype parameter
+     try:
+       self.gtdiffrsp['evtype']         = self.evtype
+     except:
+       pass
+     
      self.gtdiffrsp['clobber']      = 'yes'
      try:
        self.gtdiffrsp.run()
@@ -1514,6 +1570,14 @@ class LATData(LLEData):
      outfile                        = "%s_spec_%5.3f_%5.3f.rsp" %(self.rootName,self.tmin-self.trigTime,self.tmax-self.trigTime)
      self.gtrspgen['outfile']       = outfile
      self.gtrspgen['irfs']          = self.irf
+     
+     #This try/except is to preserve compatibility with the
+     #old science tools, which didn't have the evtype parameter
+     try:
+       self.gtrspgen['evtype']         = self.evtype
+     except:
+       pass
+     
      self.gtrspgen['thetacut']      = thetacut
      self.gtrspgen['dcostheta']     = dcostheta
      self.gtrspgen['ebinalg']       = 'LOG'
@@ -1562,6 +1626,14 @@ class LATData(LLEData):
      self.gtbkg['srcmdl']           = xmlmodel
      name                           = _getParamFromXML(xmlmodel,'OBJECT')
      self.gtbkg['target']           = name
+     
+     #This try/except is to preserve compatibility with the
+     #old science tools, which didn't have the evtype parameter
+     try:
+       self.gtbkg['evtype']         = self.evtype
+     except:
+       pass
+     
      try:
        self.gtbkg.run()
      except:
