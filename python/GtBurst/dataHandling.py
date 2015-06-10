@@ -1641,7 +1641,14 @@ class LATData(LLEData):
      #This try/except is to preserve compatibility with the
      #old science tools, which didn't have the evtype parameter
      try:
-       self.gtbkg['evtype']         = self.evtype
+       
+       #This kludge is to avoid a bug in gtbkg, which does
+       #not accept evtype='indef' for p7 data
+       if(self.irf.find("P7")):
+         self.gtbkg['evtype']       = 3
+       else:
+         self.gtbkg['evtype']       = self.evtype
+       
      except:
        pass
      
