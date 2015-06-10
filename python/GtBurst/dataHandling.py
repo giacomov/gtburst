@@ -1474,7 +1474,10 @@ class LATData(LLEData):
      #This try/except is to preserve compatibility with the
      #old science tools, which didn't have the evtype parameter
      try:
-       self.gtexpcube2['evtype']         = self.evtype
+       if(self.irf.find("P7") >= 0):
+         self.gtexpcube2['evtype']  = 3
+       else:
+         self.gtexpcube2['evtype']         = self.evtype
      except:
        pass
      
@@ -1535,7 +1538,10 @@ class LATData(LLEData):
      #This try/except is to preserve compatibility with the
      #old science tools, which didn't have the evtype parameter
      try:
-       self.gtmodel['evtype']         = self.evtype
+       if(self.irf.find("P7") >= 0):
+         self.gtmodel['evtype']     = 3
+       else:
+         self.gtmodel['evtype']     = self.evtype
      except:
        pass
      
