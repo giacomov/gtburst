@@ -97,7 +97,7 @@ class ConsoleText(Text):
         if(val.find("Info in <Minuit2>")>=0 or 
             (self.prevContent=="MINUIT" and val.replace("\n","")=='') or 
            val.find("TStreamerInfo::BuildCheck") >= 0 or
-           ( val.find("TClass::TClass") >= 0 and val.find("RuntimeWarning") >= 0 )
+           ( val.find("TClass::TClass") >= 0 and val.find("RuntimeWarning") >= 0 ) or
            val.find("TStreamerInfo") >= 0 or
            val.find("fMarkerColor") >= 0 or
            val.find("fMarkerSize") >= 0 or
