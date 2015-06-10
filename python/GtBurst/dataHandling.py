@@ -1310,7 +1310,10 @@ class LATData(LLEData):
       self.strategy                 = str(h['_STRATEG'])
       self.irf                      = str(h['_IRF'])
       self.reprocessingVersion      = str(h['_REPROC'])
-      self.evtype                   = int(h['_EVTYPE'])
+      try:
+        self.evtype                 = int(h['_EVTYPE'])
+      except:
+        self.evtype                 = 'INDEF'
       f.close()
   pass
   
