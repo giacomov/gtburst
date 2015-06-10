@@ -1140,7 +1140,7 @@ class LATData(LLEData):
       self.strategy                    = 'time'
       
       #Use the evtype 
-      if(irf.find("P8")>=0):
+      if(irf.lower().find("p8")>=0):
         
         self.evtype                    = 3
       
