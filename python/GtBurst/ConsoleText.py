@@ -94,7 +94,7 @@ class ConsoleText(Text):
         val                   = str(val.encode('utf-8'))
         if(val.find("Info in <Minuit2>")>=0 or 
             (self.prevContent=="MINUIT" and val.replace("\n","")=='') or 
-           val.find("TStreamerInfo::BuildCheck")
+           val.find("TStreamerInfo::BuildCheck") >= 0
             ):
           #This is to avoid the many warnings from ROOT and Minuit 2
           self.prevContent    = "MINUIT"
