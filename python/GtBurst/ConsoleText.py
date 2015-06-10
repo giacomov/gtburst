@@ -104,8 +104,7 @@ class ConsoleText(Text):
            val.find("fLabelColor") >= 0 or
            val.find("fLabelFont") >= 0 or
            val.find("fTitleColor") >= 0 or
-           val.find("fTitleFont") >= 0 or
-           
+           val.find("fTitleFont") >= 0           
             ):
           #This is to avoid the many warnings from ROOT and Minuit 2
           self.prevContent    = "MINUIT"
