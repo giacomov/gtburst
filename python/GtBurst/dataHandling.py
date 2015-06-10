@@ -1138,7 +1138,15 @@ class LATData(LLEData):
                               roicut=True,**kwargs):
       
       self.strategy                    = 'time'
-      self.evtype                      = 3
+      
+      #Use the evtype 
+      if(irf.find("P8")>=0):
+        
+        self.evtype                    = 3
+      
+      else:
+        
+        self.evtype                     = 'INDEF'
       
       for key in kwargs.keys():
         if(key=="strategy"):
