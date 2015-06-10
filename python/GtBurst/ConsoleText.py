@@ -92,9 +92,20 @@ class ConsoleText(Text):
         #disabled for the user, we have to set them to NORMAL (a.k.a. ENABLED), write to them,
         #then set their state back to DISABLED.
         val                   = str(val.encode('utf-8'))
+        
+        #Remove some warnings from ROOT (damn ROOT!)
         if(val.find("Info in <Minuit2>")>=0 or 
             (self.prevContent=="MINUIT" and val.replace("\n","")=='') or 
-           val.find("TStreamerInfo::BuildCheck") >= 0
+           val.find("TStreamerInfo::BuildCheck") >= 0 or
+           val.find("TStreamerInfo") >= 0 or
+           val.find("fMarkerColor") >= 0 or
+           val.find("fMarkerSize") >= 0 or
+           val.find("fAxisColor") >= 0 or
+           val.find("fLabelColor") >= 0 or
+           val.find("fLabelFont") >= 0 or
+           val.find("fTitleColor") >= 0 or
+           val.find("fTitleFont") >= 0 or
+           
             ):
           #This is to avoid the many warnings from ROOT and Minuit 2
           self.prevContent    = "MINUIT"
