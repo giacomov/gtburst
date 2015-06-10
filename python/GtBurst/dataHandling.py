@@ -1644,7 +1644,7 @@ class LATData(LLEData):
        
        #This kludge is to avoid a bug in gtbkg, which does
        #not accept evtype='indef' for p7 data
-       if(self.irf.find("P7")):
+       if( self.irf.find("P7") >= 0 ):
          self.gtbkg['evtype']       = 3
        else:
          self.gtbkg['evtype']       = self.evtype
