@@ -4,6 +4,7 @@
 import UnbinnedAnalysis
 import BinnedAnalysis
 
+import struct
 import numpy
 import os,sys, re, glob, shutil, datetime, time
 import pyfits
@@ -1598,8 +1599,8 @@ class LATData(LLEData):
      self.gtrspgen['thetacut']      = thetacut
      self.gtrspgen['dcostheta']     = dcostheta
      self.gtrspgen['ebinalg']       = 'LOG'
-     self.gtrspgen['emin']          = 30.0
-     self.gtrspgen['emax']          = 200000.0
+     self.gtrspgen['emin']          = 70.0
+     self.gtrspgen['emax']          = 100000.0
      self.gtrspgen['enumbins']      = numbins
      try:
        self.gtrspgen.run()
@@ -1670,9 +1671,22 @@ class LATData(LLEData):
      
      if(numbins==None):
        #Make a PHA1 file
-       #10 bins for each decade in energy
-       ndecades                       = numpy.log10(self.emax)-numpy.log10(self.emin)
-       numbins                        = int(numpy.ceil(ndecades*10.0))
+       
+       #32bit or 64 bit?
+       
+       bit = ( 8 * struct.calcsize("P"))
+       
+       if( bit == 32 ):
+         
+         #10 bins is the maximum allowed for 32 bit system, otherwise gtrspgen will crash
+         
+         numbins                        = 10
+       
+       else:
+         
+         
+         ndecades                       = numpy.log10(self.emax)-numpy.log10(self.emin)
+         numbins                        = int(numpy.ceil(ndecades*10.0))
      pass
      
      phafile                          = self.binByEnergy(numbins)
