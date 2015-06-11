@@ -4,7 +4,6 @@
 import UnbinnedAnalysis
 import BinnedAnalysis
 
-import struct
 import numpy
 import os,sys, re, glob, shutil, datetime, time
 import pyfits
@@ -1671,22 +1670,10 @@ class LATData(LLEData):
      
      if(numbins==None):
        #Make a PHA1 file
-       
-       #32bit or 64 bit?
-       
-       bit = ( 8 * struct.calcsize("P"))
-       
-       if( bit == 32 ):
-         
-         #10 bins is the maximum allowed for 32 bit system, otherwise gtrspgen will crash
-         
-         numbins                        = 10
-       
-       else:
-         
-         
-         ndecades                       = numpy.log10(self.emax)-numpy.log10(self.emin)
-         numbins                        = int(numpy.ceil(ndecades*10.0))
+           
+       ndecades                       = numpy.log10(self.emax)-numpy.log10(self.emin)
+       numbins                        = int(numpy.ceil(ndecades*10.0))
+     
      pass
      
      phafile                          = self.binByEnergy(numbins)
