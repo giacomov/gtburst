@@ -92,6 +92,17 @@ def fromEvclassToIRF(rep,event_class):
       pass
     pass
     
+    if(exponent is None):
+      #This might be Solar Flare classes, which are not
+      #"contained" within the transient 100S selection
+      for i in range(15,21):
+        if(event_class[i]==True):
+          exponent            = i
+          break
+        pass
+      pass
+    pass
+    
     evclass                   = pow(2,32-exponent-1)
   pass
   
