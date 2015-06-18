@@ -292,7 +292,7 @@ class IsotropicPowerlaw(GenericSource):
     self.source.spectrum.Prefactor.free  = 1
     
     self.source.spectrum.Index.max       = 1.0
-    self.source.spectrum.Index.min       = -10
+    self.source.spectrum.Index.min       = -5
     self.source.spectrum.Index.value     = -1.5
     self.source.spectrum.Index.free      = 1
     
