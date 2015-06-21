@@ -924,8 +924,16 @@ class multiprocessScienceTools(dict):
     else:
       self.run                         = self.singleproc_run
     pass
-    self.scienceTool                   = scienceTool
+    self.scienceTool                   = GtApp(scienceTool)
+    
     dict.__init__(self)
+    
+    #This is to make this class behave like the GtApp class
+    for i,k in enumerate(self.scienceTool.keys()):
+      try:
+        self[k]                          = self.scienceTool[k]
+      except:
+        self[k]                          = ''
   pass
   
   def multiproc_run(self):
@@ -934,11 +942,11 @@ class multiprocessScienceTools(dict):
   pass
   
   def singleproc_run(self):
-    tool                               = GtApp(self.scienceTool)
+     
     for k,v in self.iteritems():
-      tool[k]                      = v
+      self.scienceTool[k]               = v
     pass
-    tool.run()
+    self.scienceTool.run()
   pass
 pass
 
@@ -1256,10 +1264,9 @@ class LATData(LLEData):
       
       #This try/except is to preserve compatibility with the
       #old science tools, which didn't have the evtype parameter
-      try:
+      if( 'evtype' in self.gtselect.keys() ):
         self.gtselect['evtype']         = self.evtype
-      except:
-        pass
+      pass
             
       self.gtselect['convtype']        = -1
       self.gtselect['clobber']         = "yes"
@@ -1425,14 +1432,13 @@ class LATData(LLEData):
      self.gtexpmap['expcube']       = self.livetimeCube
      outfileexpo                    = "%s_expomap.fit" %(self.rootName)
      self.gtexpmap['outfile']       = outfileexpo
-     self.gtexpmap['irfs']          = self.irf+"PIPPO"
+     self.gtexpmap['irfs']          = self.irf
      
      #This try/except is to preserve compatibility with the
      #old science tools, which didn't have the evtype parameter
-     try:
+     if( 'evtype' in self.gtexpmap.keys() ):
        self.gtexpmap['evtype']         = self.evtype
-     except:
-       pass
+     pass
      
      self.gtexpmap['srcrad']        = (2*self.rad)
      #Guarantee that this is divisible by 4
@@ -1473,13 +1479,12 @@ class LATData(LLEData):
      
      #This try/except is to preserve compatibility with the
      #old science tools, which didn't have the evtype parameter
-     try:
+     if( 'evtype' in self.gtexpcube2.keys() ):
        if(self.irf.find("P7") >= 0):
          self.gtexpcube2['evtype']  = 3
        else:
          self.gtexpcube2['evtype']         = self.evtype
-     except:
-       pass
+     pass
      
      self.gtexpcube2['clobber']     = 'yes'
      #All other parameters will be taken from the livetime cube
@@ -1500,10 +1505,9 @@ class LATData(LLEData):
      
      #This try/except is to preserve compatibility with the
      #old science tools, which didn't have the evtype parameter
-     try:
+     if( 'evtype' in self.gtsrcmaps.keys()):
        self.gtsrcmaps['evtype']         = self.evtype
-     except:
-       pass
+     pass
      
      self.gtsrcmaps['bexpmap']      = self.binnedExpoMap
      outfilesrcmap                  = "%s_srcMap.fit" %(self.rootName)
@@ -1537,13 +1541,12 @@ class LATData(LLEData):
      
      #This try/except is to preserve compatibility with the
      #old science tools, which didn't have the evtype parameter
-     try:
+     if( 'evtype' in self.gtmodel.keys() ):
        if(self.irf.find("P7") >= 0):
          self.gtmodel['evtype']     = 3
        else:
          self.gtmodel['evtype']     = self.evtype
-     except:
-       pass
+     pass
      
      self.gtmodel['expcube']        = self.livetimeCube
      self.gtmodel['bexpmap']        = self.binnedExpoMap
@@ -1566,10 +1569,9 @@ class LATData(LLEData):
      
      #This try/except is to preserve compatibility with the
      #old science tools, which didn't have the evtype parameter
-     try:
+     if( 'evtype' in self.gtdiffrsp.keys() ):
        self.gtdiffrsp['evtype']         = self.evtype
-     except:
-       pass
+     pass
      
      self.gtdiffrsp['clobber']      = 'yes'
      try:
@@ -1590,10 +1592,9 @@ class LATData(LLEData):
      
      #This try/except is to preserve compatibility with the
      #old science tools, which didn't have the evtype parameter
-     try:
+     if( 'evtype' in self.gtrspgen.keys() ):
        self.gtrspgen['evtype']         = self.evtype
-     except:
-       pass
+     pass
      
      self.gtrspgen['thetacut']      = thetacut
      self.gtrspgen['dcostheta']     = dcostheta
@@ -1644,9 +1645,9 @@ class LATData(LLEData):
      name                           = _getParamFromXML(xmlmodel,'OBJECT')
      self.gtbkg['target']           = name
      
-     #This try/except is to preserve compatibility with the
+     #This is to preserve compatibility with the
      #old science tools, which didn't have the evtype parameter
-     try:
+     if( 'evtype' in self.gtbkg.keys() ):
        
        #This kludge is to avoid a bug in gtbkg, which does
        #not accept evtype='indef' for p7 data
@@ -1655,8 +1656,7 @@ class LATData(LLEData):
        else:
          self.gtbkg['evtype']       = self.evtype
        
-     except:
-       pass
+     pass
      
      try:
        self.gtbkg.run()
