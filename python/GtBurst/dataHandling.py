@@ -1216,8 +1216,8 @@ class LATData(LLEData):
         self.gtmktime['clobber']         = 'yes'
         try:
           self.gtmktime.run()
-        except:
-          raise GtBurstException(22,"gtmktime failed. Likely your filter resulted in zero exposure.")
+        except BaseException as e:
+          raise GtBurstException(22,"gtmktime failed: %s" % str(e))
       else:
         outfilemk                      = self.originalEventFile
       
@@ -1267,8 +1267,8 @@ class LATData(LLEData):
       self.gtselect['outfile']         = outfileselect
       try:
         self.gtselect.run()
-      except:
-        raise GtBurstException(23,"gtselect failed for unknown reason")
+      except BaseException as e:
+        raise GtBurstException(23,"gtselect failed for unknown reason: %s " % str(e))
       
       #Now write a keyword which will be used by other methods to recover ra,dec,rad,emin,emax,zcut
       f                                = pyfits.open(outfileselect,'update')      
@@ -1345,8 +1345,8 @@ class LATData(LLEData):
      self.gtbin['proj']             = projection
      try:
        self.gtbin.run()
-     except:
-       raise GtBurstException(24,"gtbin failed for unknown reason while producing the sky map")
+     except BaseException as e:
+       raise GtBurstException(24,"gtbin failed for unknown reason while producing the sky map: %s" %(str(e)))
   pass
     
   def doSkyCube(self,nebins=10,binsz=0.2):
@@ -1376,8 +1376,8 @@ class LATData(LLEData):
      self.gtbin['enumbins']         = nebins
      try:
        self.gtbin.run()
-     except:
-       raise GtBurstException(25,"gtbin failed for unknown reason while producing the sky cube")
+     except BaseException as e:
+       raise GtBurstException(25,"gtbin failed for unknown reason while producing the sky cube: %s" % str(e))
      
      self.skyCube                   = outfile
   pass
@@ -1411,8 +1411,8 @@ class LATData(LLEData):
      
      try:
        self.gtltcube.run()
-     except:
-       raise GtBurstException(26,"gtltcube failed in an unexpected way")     
+     except BaseException as e:
+       raise GtBurstException(26,"gtltcube failed in an unexpected way: %s" % str(e))     
      self.livetimeCube              = outfilecube
      os.remove("__ft2temp.fits")
   pass
@@ -1425,7 +1425,7 @@ class LATData(LLEData):
      self.gtexpmap['expcube']       = self.livetimeCube
      outfileexpo                    = "%s_expomap.fit" %(self.rootName)
      self.gtexpmap['outfile']       = outfileexpo
-     self.gtexpmap['irfs']          = self.irf
+     self.gtexpmap['irfs']          = self.irf+"PIPPO"
      
      #This try/except is to preserve compatibility with the
      #old science tools, which didn't have the evtype parameter
@@ -1442,8 +1442,8 @@ class LATData(LLEData):
      self.gtexpmap['clobber']       = 'yes'
      try:
        self.gtexpmap.run()
-     except:
-       raise GtBurstException(27,"gtexpmap failed in an unexpected way")
+     except BaseException as e:
+       raise GtBurstException(27,"gtexpmap failed in an unexpected way: %s" % str(e))
      self.exposureMap               = outfileexpo
   pass
     
