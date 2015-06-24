@@ -3,8 +3,14 @@ import os
 
 #This converts from MET to Julian Date
 def _jd_from_MET( met ):
-    jd=JulianDate((JulianDate_missionStart().seconds()
-                           + met)/JulianDate.secondsPerDay)
+    
+    #Old ST
+    try:
+      ref = JulianDate_missionStart().seconds()
+    except NameError:
+      ref = JulianDate.missionStart().seconds()
+    
+    jd=JulianDate( (ref + met) / JulianDate.secondsPerDay )
     return jd
 
 def getSunPosition( met ):
