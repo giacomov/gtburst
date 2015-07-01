@@ -9,6 +9,8 @@ from GtBurst.EntryPoint import EntryPoint
 from GtBurst.SubWindow import SubWindow
 import datetime, math
 
+from GtBurst.dataHandling import date2met
+
 # Convert RA HH:MM:SS.SSS into Degrees :
 def convHMS(ra):
    try :
@@ -51,46 +53,22 @@ def convDMS(dec):
 
    return(sign*(deg+(arcmin*5./3.+arcsec*5./180.)/100.))
 
-#Convert a UTC date in MET
-def date2met(datestring):
-    _missionStart             = datetime.datetime(2001, 1, 1, 0, 0, 0)
-       
-    sep                       = '-'
-    if '/' in datestring : 
-      sep                     = '/'
-    year,month,day            = datestring.split(sep)
-    if len(year)==2: 
-      year                    = int(year)+2000
-        
-    # time given in the string?
-    day                       = day.replace('T',':')
-    day                       = day.replace(' ',':')
-    day,hours,mins,secs       = day.split(':')
-    secs                      = float(secs)
-    secs_i                    = math.floor(secs)
-    decsec                    = secs-secs_i
-    
-    current                   = datetime.datetime(year=int(year),
-                                                  month=int(month),
-                                                  day=int(day),
-                                                  hour=int(hours),
-                                                  minute=int(mins),
-                                                  second=int(secs_i))
-
-    diff                      = current -_missionStart
-    met                       = diff.days*86400. + diff.seconds + decsec
-    
-    #Handling leap seconds
-    if int(year)>2005:    met+=1
-    if int(year)>2008:    met+=1
-    if float(met)>362793601.0: met+=1 # June 2012 leap second    
-    return met
-
 def sortby(tree, col, descending):
     """Sort tree contents when a column is clicked on."""
     # grab values to sort
     data = [(tree.set(child, col), child) for child in tree.get_children('')]
-
+        
+    #Figure out if this is a float column. If it is,
+    #transform to float so the ordering will be meaningful
+    try:
+      
+      data = map(lambda x: ( float(x[0]), x[1]), data)
+    
+    except:
+      
+      #Nope!
+      pass
+    
     # reorder data
     data.sort(reverse=descending)
     for indx, item in enumerate(data):
@@ -176,7 +154,7 @@ class TriggerSelector(object):
         #Convert RA, Dec from hh mm ss to decimal, and the trigger time from ISO UTC to MET
         for i in range(len(self.data)):
           triggerDate         = self.data[i][1].strip()
-          self.data[i][1]     = "%12.3f" % date2met(triggerDate)
+          self.data[i][1]     = "%12.3f" % date2met(triggerDate.replace("T"," "))
           ra                  = self.data[i][3].strip().replace(' ',':') #RA in HH:DD:MM.SSS format
           self.data[i][3]     = " %5.3f" % convHMS(ra)
           dec                 = self.data[i][4].strip().replace(' ',':')
@@ -187,15 +165,19 @@ class TriggerSelector(object):
           window.destroy()
     pass
     
-    def _setup_widgets(self):
-        self.filterFrame      = Frame(self.root)
-        self.filterFrame.grid(row=0,column=0)
-        triggerTypes          = list(set(map(lambda x:x[2],self.data)))
-        triggerTypes.sort()
-        triggerTypes.insert(0,'All')
-        self.filter           = EntryPoint(self.filterFrame,labeltext="Trigger type filter: ",
-                                           textwidth=20,possibleValues=triggerTypes)
-        self.filter.variable.trace('w',lambda name, index, mode, sv=self.filter.variable: self.apply_filter(sv))
+    def _setup_widgets(self, useFilter=True):
+        
+        if(useFilter):
+          self.filterFrame      = Frame(self.root)
+          self.filterFrame.grid(row=0,column=0)
+          triggerTypes          = list(set(map(lambda x:x[2],self.data)))
+          triggerTypes.sort()
+          triggerTypes.insert(0,'All')
+          self.filter           = EntryPoint(self.filterFrame,labeltext="Trigger type filter: ",
+                                             textwidth=20,possibleValues=triggerTypes)
+          self.filter.variable.trace('w',lambda name, index, mode, sv=self.filter.variable: self.apply_filter(sv))
+        pass
+        
         self.container        = Frame(self.root)
         self.container.grid(row=1,column=0)
         self.root.grid_columnconfigure(0,weight=1)
