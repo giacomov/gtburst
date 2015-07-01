@@ -78,11 +78,13 @@ from GtBurst.EntryPoint import EntryPoint
 from GtBurst.SubWindow import SubWindow
 from GtBurst.fontDefinitions import *
 from GtBurst.TriggerSelector import TriggerSelector
+from GtBurst.FGLSelector import FGLSelector
 from GtBurst.HyperlinkManager import HyperlinkManager
 from GtBurst import getLLEfiles
 from GtBurst import getGBMfiles
 from GtBurst import downloadTransientData
 from GtBurst.dataHandling import _getLatestVersion
+from GtBurst.dataHandling import date2met
 from GtBurst.GtBurstException import GtBurstException
 from GtBurst.getDataPath import getDataPath
 
@@ -550,8 +552,11 @@ class GUI(object):
                                command=self.loadDataSetsFromAdirectory)
     filemenu.add_command(label="Load a custom dataset...",
                                command=self.loadCustomDataset)
-    filemenu.add_command(label="Download datasets...",
+    filemenu.add_command(label="Download trigger datasets...",
                                command=self.downloadDataSet)
+    filemenu.add_command(label="Download point source dataset...",
+                               command=self.downloadDataFGLsource)
+    
     filemenu.add_command(label="Change trigger time...",
                                command=self.changeTriggerTime)
     filemenu.add_command(label="Reset...",
@@ -1131,6 +1136,105 @@ class GUI(object):
        return
   pass
   
+  def browseFGL(self,window,triggerNameVar,triggerTimeVar,raVar,decVar):
+     browser                  = FGLSelector(window)
+     try:
+       window.wait_window(browser.root)
+       triggerNameVar.set(browser.triggerName)
+       #triggerTimeVar.set(browser.triggerTime)
+       raVar.set(browser.ra)
+       decVar.set(browser.dec)
+     except:
+       #Problem with the download (most probably)
+       return
+  pass
+  
+  def downloadDataFGLsource(self):
+    #self.cleanUserInteractionFrame()
+    thisWindow                = SubWindow(self.root,
+                                          transient=True,title="Download data",
+                                          initialHint="Please insert information on the source you want to analyze" +
+                                                      " or select it by clicking on the 'Select source' button")    
+    thisWindow.bottomtext.config(state="normal")
+    thisWindow.bottomtext.image_create(END, image=self.lightbulb)
+    thisWindow.bottomtext.insert(END, "Please insert information on the source you want to analyze" +
+                                      " or select it by clicking on the 'Select source' button")
+    thisWindow.bottomtext.config(state="disabled")
+    #Create two labels and two entries
+    #colWidth                  = 60
+    
+    #Trigger form
+    triggerFrame              = Frame(thisWindow.frame)
+    triggerFrame.grid(row=0,column=0)
+    
+    triggerForm               = EntryPoint(triggerFrame,
+                                           labeltext="Source name:",
+                                           helptext="Source name (use the Browse Source button to select)",
+                                           textwidth=20,initvalue='',
+                                           directory=False,browser=False,
+                                           inactive=True)
+    
+    browserButton             = Button(triggerFrame,text="Browse Source",font=NORMALFONT,
+                                       command=lambda: self.browseFGL(thisWindow.window, 
+                                                                      triggerForm.variable,
+                                                                      triggerTimeForm.variable,
+                                                                      raForm.variable,
+                                                                      decForm.variable))
+    browserButton.grid(row=0,column=3)
+    
+    triggerTimeForm           = EntryPoint(triggerFrame,
+                                           labeltext="Reference date:",
+                                           helptext="Reference date in UTC (YYYY-MM-DD HH:MM:SS)",
+                                           textwidth=20,initvalue='',
+                                           directory=False,browser=False,
+                                           inactive=False)
+    raForm                    = EntryPoint(triggerFrame,
+                                           labeltext="R.A.",
+                                           helptext="Right Ascension (J2000), decimal format (deg)",
+                                           textwidth=20,initvalue='',
+                                           directory=False,browser=False,
+                                           inactive=False)
+    decForm                   = EntryPoint(triggerFrame,
+                                           labeltext="Dec.",
+                                           helptext="Declination (J2000), decimal format (deg)",
+                                           textwidth=20,initvalue='',
+                                           directory=False,browser=False,
+                                           inactive=False)
+        
+    buttonFrame               = Frame(thisWindow.frame)
+    buttonFrame.grid(row=2,column=0)
+    #Download button
+    downloadButton            = Button(buttonFrame,
+                                  text="Download data", font=NORMALFONT,
+                                  command=lambda: self._sanitizeFGLdownload(
+                                               triggerForm.get(),
+                                               triggerTimeForm.get(),
+                                               raForm.get(),
+                                               decForm.get(),
+                                               thisWindow.window))
+    downloadButton.grid(row=0,column=0)
+    #Cancel button
+    cancelButton              = Button(buttonFrame,
+                                  text="Cancel", font=NORMALFONT,
+                                  command=thisWindow.window.destroy)
+    cancelButton.grid(row=0,column=1)
+    
+    #Now launch the browser
+    #self.browseTriggers(thisWindow.window,triggerForm.variable,triggerTimeForm.variable,raForm.variable,decForm.variable)
+  pass
+  
+  def _sanitizeFGLdownload(self, name, date, ra, dec, window):
+    
+    if(date is not None):
+      
+      try:
+        met                       = date2met(date)
+      except:
+        showerror("You have to specify a date","You have to specify a valid reference date")
+        return
+    pass
+    self.downloadDataSetFromFTP(name, met, ra, dec, window, 0,0,1)
+  
   def downloadDataSet(self):
     #self.cleanUserInteractionFrame()
     thisWindow                = SubWindow(self.root,
@@ -1254,8 +1358,14 @@ class GUI(object):
                                                                self.configuration.get('dataRepository'),
                                                                parent=self.root)
       try:
-        howManySeconds        = askfloat("LAT data","Please indicate how many seconds of data\nafter the trigger you would like to download:",initialvalue=10000,parent=self.root)
-
+        howManySeconds        = askfloat("LAT data","Please indicate how many seconds of data\nafter the trigger or reference date you would like to download:",initialvalue=10000,parent=self.root)
+        
+        try:
+          howManySeconds      = float(howManySeconds)
+        except:
+          #The user hit cancel
+          return
+        
         LATdownloader.setCuts(ra,dec,60.0,float(triggerTime),float(triggerTime)-1000,float(triggerTime)+howManySeconds,'MET')
       except:
         showerror("Error downloading data from FTP","Could not download data for trigger %s. Reason:\n\n '%s' \n\n." %(triggerName,sys.exc_info()[1]),parent=self.root)
