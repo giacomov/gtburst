@@ -383,9 +383,16 @@ class catalog_2FGL(object):
         thisDec                 = coords['dec']
         
         thisDist                = getAngularDistance(ra,dec,thisRa,thisDec)
-
+        
+        #Remove the source if the distance is above the requested radius,
+        #or if the distance is below 0.01 (i.e., the source under analysis
+        #is the same as the current one)
+        
         if(float(thisDist) >= float(rad)):
           #Remove this source
+          root.remove(source)
+        elif(float(thisDist) <= 0.01):
+          print("\nWARNING: Auto-removed source %s\n" % (source.get('name')))
           root.remove(source)
         else:
           print("Keeping point source %s (%4.2f deg away)..." %(source.get('name'),float(thisDist)))
