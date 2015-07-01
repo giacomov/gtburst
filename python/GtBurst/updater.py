@@ -26,6 +26,21 @@ def update(debug=False):
   
     pass
   
+  #now check if we have write permission in this directory
+  try:
+  
+    with open("_write_test","w+") as f:
+    
+      f.write("TEST")
+    
+  except:
+    
+    raise GtBurstException(1,"The updater cannot write in directory %s. Do you have write permission there?" %(os.getcwd()))  
+  
+  else:
+    
+    os.remove("_write_test")
+  
   urllib.urlcleanup()
   
   try:
@@ -40,14 +55,22 @@ def update(debug=False):
   
     raise GtBurstException(1,"Problems with the download. Check your connection, and that you can reach %s" %(remoteUrl))
   
-  pass
-  
+  pass  
+    
   #Read the list of files
   f                           = open('__file_list')
   files                       = f.readlines()
   f.close()
   os.remove("__file_list")
   
+  #Check if there is a HTML tag in the __file_list. This can
+  #happen if there is a proxy in between which is forwarding to
+  #a page different than the one intended
+  if(" ".join(files).lower().find("<html>") >= 0):
+    raise GtBurstException(1,"Download was redirected. This happens usually when you are behind a proxy." +
+                             " If you are behind a proxy, make sure to log in and " +
+                             "that executables from the command line can reach the internet directly.")
+   
   #Get the path of the gtburst installation
   path                      = GtBurst.__file__
   installationPath          = os.path.join(os.path.sep.join(path.split(os.path.sep)[0:-3]))
