@@ -316,7 +316,8 @@ def date2met(*kargs):
     met= diff.days*86400. + diff.seconds + time + decsec
     if float(year)>2005:    met+=1
     if float(year)>2008:    met+=1
-    if float(met)>362793601.0: met+=1 # June 2012 leap second    
+    if float(met)>362793601.0: met+=1 # June 2012 leap second 
+    if float(met)>457401602.0: met+=1 # 2015 leap second
     return met
 
 
@@ -326,9 +327,10 @@ def met2date(MET,opt=None):
     If opt=="grbname", the GRB name format 080725434 is returned. 
     """
 
-    if MET>252460801:   MET=MET-1
-    if MET>156677800:   MET=MET-1
+    if MET>157766400:   MET=MET-1 # leap second before launch
+    if MET>252460800:   MET=MET-1 # end of 2008
     if MET>362793601:   MET=MET-1 # 2012 leap second
+    if MET>457401602:   MET=MET-1 # 2015 leap second
     
     metdate  = datetime.datetime(2001, 1, 1,0,0,0)
     dt=datetime.timedelta(seconds=float(MET))
@@ -1365,7 +1367,11 @@ class LATData(LLEData):
      self.gtbin['outfile']          = outfile
      self.gtbin['algorithm']        = 'CCUBE'
      
-     nxpix                          = int(2*float(self.rad)/float(binsz))+10
+     #The largest square inscribed in the current ROI has
+     #this side
+     side                           = 2.0 * self.rad / math.sqrt(2.0)
+     
+     nxpix                          = int( side / float(binsz) )
      nypix                          = nxpix
      self.gtbin['nxpix']            = nxpix
      self.gtbin['nypix']            = nypix
