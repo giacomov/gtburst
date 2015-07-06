@@ -889,7 +889,23 @@ class GUI(object):
     #Get the processing version for this LAT data
     reproc                    = pyfits.getval(filter(datasetsFilter,self.datasets)[0]['eventfile'],'PROC_VER',ext=0)
     
-    gtdocountsmap.definedParameters['irf'].possibleValues = IRFS.PROCS[str(reproc)]
+    #Select the appropriate irfs
+    irfs                      = IRFS.PROCS[str(reproc)]
+    
+    #If the ORIGIN keyword is 'FSSC' then remove P8TRANSIENT_R100E and P8TRANSIENT_R100
+    #because the FSSC release of P8 does not contain them
+    
+    origin                    = pyfits.getval(filter(datasetsFilter,self.datasets)[0]['eventfile'],
+                                              'ORIGIN',
+                                              ext=('EVENTS',1))
+        
+    if( origin.find('FSSC') >= 0 ):
+      
+      for r in ['P8_TRANSIENT100E','P8_TRANSIENT100','P8_TRANSIENT100S']:
+        
+        irfs.remove(r.lower())
+    
+    gtdocountsmap.definedParameters['irf'].possibleValues = irfs
     
     gtdocountsmap.definedParameters['ra'].type = commandDefiner.HIDDEN
     gtdocountsmap.definedParameters['ra'].value = self.objectInfoEntries['ra'].variable.get()
