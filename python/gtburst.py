@@ -903,7 +903,14 @@ class GUI(object):
       
       for r in ['P8_TRANSIENT100E','P8_TRANSIENT100','P8_TRANSIENT100S']:
         
-        irfs.remove(r.lower())
+        try:
+        
+          irfs.remove(r.lower())
+        
+        except:
+          #This could happen with p7 data. In any case we don't want to fail for
+          #something this unimportant
+          pass
     
     gtdocountsmap.definedParameters['irf'].possibleValues = irfs
     
