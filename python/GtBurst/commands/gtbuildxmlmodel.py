@@ -10,9 +10,9 @@ from GtBurst import dataHandling
 from GtBurst.GtBurstException import GtBurstException
 
 if(bkge.active):
-  possibleParticleModels = ['isotr with pow spectrum', 'isotr template', 'none', 'bkge']
+  possibleParticleModels = ['isotr template', 'isotr with pow spectrum',  'none', 'bkge']
 else:
-  possibleParticleModels = ['isotr with pow spectrum', 'isotr template', 'none']
+  possibleParticleModels = ['isotr template', 'isotr with pow spectrum', 'none']
 ################ Command definition #############################
 executableName                = "gtbuildxmlmodel"
 version                       = "1.0.0"
@@ -46,11 +46,11 @@ thisCommand.addParameter("verbose","Verbose output (possible values: 'yes' or 'n
 GUIdescription                = "You have to choose which model include in the likelihood analysis."
 GUIdescription               += " See http://fermi.gsfc.nasa.gov/ssc/data/analysis/scitools/source_models.html for the list"
 GUIdescription               += " of available spectral model for the source_model parameter."
-GUIdescription               += "TIP Use 'PowerLaw2' for normal GRB analysis. For TRANSIENT class data you should use "
-GUIdescription               += "'isotr with pow spectrum' for the particle background and 'template (fixed norm.)' for "
-GUIdescription               += "the Galactic component. For SOURCE class data you should use "
-GUIdescription               += "'isotr template' for the particle background and 'template' for the Galactic component."
-GUIdescription               += " The latter indeed include already the residual particle contamination in SOURCE data."
+GUIdescription               += "TIP Use 'PowerLaw2' for normal GRB analysis. Normally you should use "
+GUIdescription               += "'isotr template' for the particle background and 'template' for "
+GUIdescription               += "the Galactic component. If the source is very faint, you might want to use "
+GUIdescription               += "'template (fixed norm.)' for the Galactic component to reduce the number"
+GUIdescription               += " of parameters in the likelihood fit."
 
 thisCommand.setGUIdescription(GUIdescription)
 
