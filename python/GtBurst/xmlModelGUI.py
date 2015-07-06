@@ -175,6 +175,7 @@ class xmlModelGUI(object):
     pass
     
     def _setup_tree(self):
+                
         if(self.tree!=None):
           self.tree.destroy()
         # XXX Sounds like a good support class would be one for constructing
@@ -192,21 +193,32 @@ class xmlModelGUI(object):
         self.container.grid_rowconfigure(0, weight=10)
 
         self.data = self.xmlModel.parameters
+        
         for col in self.columns:
             self.tree.heading(col, text=col.title(),
                 command=lambda c=col: sortby(self.tree, c, 0))
             # XXX tkFont.Font().measure expected args are incorrect according
             #     to the Tk docs
             self.tree.column(col, width=tkFont.Font().measure(col.title()),stretch=False,minwidth=10)
+        
         self.items = []    
+        
+        colWidths = map(lambda x:len(x),self.columns)
+        colLongestEntry = map(lambda x:x,self.columns)
+        
         for item in self.data:
             self.items.append(self.tree.insert('', 'end', values=item.values()))
-
-            # adjust columns lenghts if necessary
+            
+            #Keep track of column length
             for indx, val in enumerate(item.values()):
-                ilen = tkFont.Font().measure(val)
-                if self.tree.column(self.columns[indx], width=None) < ilen:
-                    self.tree.column(self.columns[indx], width=ilen)
+              if(len(val) > colWidths[indx]):
+                colWidths[indx] = len(val)
+                colLongestEntry[indx] = val
+        
+        for indx, width in enumerate(colWidths):
+          ilen = tkFont.Font().measure(colLongestEntry[indx])
+          self.tree.column(self.columns[indx], width=ilen)
+          
         self.tree.bind("<Double-1>", self.OnDoubleClick)
     pass
     
