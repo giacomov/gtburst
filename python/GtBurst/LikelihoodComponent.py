@@ -352,6 +352,7 @@ class BKGETemplate(TemplateFile):
   pass
 pass
 
+#This is actually now the 3FGL
 class catalog_2FGL(object):
   def __init__(self,xmlfile):
     self.tree                 = ET.parse(xmlfile)
@@ -366,12 +367,12 @@ class catalog_2FGL(object):
       spatialModel            = source.findall('spatialModel')[0]
       
       #Remove point sources which cannot contribute any photon given the exposure
-      aeff                    = 0.6e4 #cm2
-      npred                   = float(source.get('Flux100'))*exposure*aeff
-      if(source.get('type')=='PointSource' and npred < 1):
-        root.remove(source)
-        continue
-      pass
+      #aeff                    = 0.6e4 #cm2
+      #npred                   = float(source.get('Flux1000'))*exposure*aeff
+      #if(source.get('type')=='PointSource' and npred < 0.1):
+      #  root.remove(source)
+      #  continue
+      #pass
       
       if(source.get('type')=='PointSource'):
         #Get coordinates of this point source
@@ -431,7 +432,7 @@ class catalog_2FGL(object):
         print("WTF")
         raise
     pass
-    print("Kept %s point sources from the 2FGL catalog" %(srcs))
+    print("Kept %s point sources from the FGL catalog" %(srcs))
     self.tree.write(output)
   pass
 pass
@@ -463,8 +464,8 @@ class LikelihoodModel(object):
     #Add all point sources in the 2FGL catalog with an angular distance less than 'radius'
     #from the given Ra,DEC\
     dataPath                  = getDataPath()
-    fgl                       = catalog_2FGL(os.path.join(dataPath,'gll_psc_v07.xml'))
-    tmpname                   = '__2fgl_sources.xml'
+    fgl                       = catalog_2FGL(os.path.join(dataPath,'gll_psc_v16.xml'))
+    tmpname                   = '__3fgl_sources.xml'
     fgl.getXmlForSourcesInTheROI(float(ra),float(dec),radius,tmpname,exposure)
     #Now merge the two trees
     tree                      = ET.parse(filename)
@@ -549,7 +550,7 @@ class LikelihoodResultsPrinter(object):
       #energy flux
       MeVtoErg                  = 1.60217646E-6
       upperLimitComputed        = False
-      if(math.ceil(TS) >= tsmin or sourceName.find('2FGL')>=0 or source.get('type')!='PointSource'):
+      if(math.ceil(TS) >= tsmin or sourceName.find('3FGL')>=0 or source.get('type')!='PointSource'):
         flux                    = '%10.3g' % (self.likelihoodObj.energyFlux(sourceName,self.emin,self.emax)*MeVtoErg)
         try:
           fluxError             = '%10.3g' % (self.likelihoodObj.energyFluxError(sourceName,self.emin,self.emax)*MeVtoErg)
@@ -606,7 +607,7 @@ class LikelihoodResultsPrinter(object):
         thisDec                 = 0
       pass
         
-      if(sourceName.find('2FGL')>=0 and TS < 1):
+      if(sourceName.find('3FGL')>=0 and TS < 1):
         #Do not print non-detected 2FGL sources
         listOfSources.append(SourceStruct(sourceName,sourceType,thisRa,thisDec,flux,fluxError,0,0,TS))
         nNonPrinted            += 1
@@ -649,7 +650,7 @@ class LikelihoodResultsPrinter(object):
     pass
     append("-%20s-%15s-%10s-%12s-%10s-%6s-\n" %(20*'-',15*'-',10*'-',12*'-',10*'-',6*'-'))
     if(nNonPrinted!=0):
-      append("*** plus %s 2FGL sources with TS<1 (not printed to save space)" %(nNonPrinted))
+      append("*** plus %s FGL sources with TS<1 (not printed to save space)" %(nNonPrinted))
     append("*** All fluxes and upper limits have been computed in the %s - %s energy range." %(self.emin,self.emax))
     append("*** Upper limits (if any) are computed assuming a photon index of %3.1f, with the 95 %s c.l." %(phIndexForUL,'%'))
           

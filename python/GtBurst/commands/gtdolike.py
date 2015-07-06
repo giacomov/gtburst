@@ -185,7 +185,7 @@ def run(**kwargs):
     modelmapfile              = LATdata.makeModelSkyMap(outfilelike) 
     
     #Display point sources in the image, and report in the table
-    #all 2FGL sources with TS > 9 + always the GRB, independently of its TS
+    #all 3FGL sources with TS > 9 + always the GRB, independently of its TS
     detectedSources           = []
     grbFlux                   = 1e-13
     for src in sources:
@@ -194,7 +194,7 @@ def run(**kwargs):
       if(src.type=='PointSource'):
         if(src.TS > 4):
           detectedSources.append(src)
-          if(src.name.find('2FGL')<0):
+          if(src.name.find('3FGL')<0):
             #GRB
             grbFlux           = src.flux
         pass

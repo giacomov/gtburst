@@ -13,7 +13,7 @@ class FGLSelector(TriggerSelector):
         
         if(xmlfile is None):
           
-          xmlfile             = os.path.join(getDataPath(), 'gll_psc_v07.xml')
+          xmlfile             = os.path.join(getDataPath(), 'gll_psc_v16.xml')
         
         pass
         
