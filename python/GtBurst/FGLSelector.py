@@ -1,10 +1,29 @@
 import os
+import numpy
 
 from GtBurst.TriggerSelector import *
 
 from GtBurst.getDataPath import getDataPath
 
 import xml.etree.ElementTree as ET
+
+#Make the dictionary with extended information about sources
+
+txtfile = os.path.join(getDataPath(), '3fgl_extendedData.txt')
+
+if(not os.path.exists(txtfile)):
+  raise RuntimeError("You do not have the 3fgl_extendedData.txt file in your data directory!")
+
+data = numpy.recfromtxt(txtfile,delimiter=';',names=True)
+
+#Keys in the 3fgl_extendedData are: 'Source_name', 'Variability_index',
+#                                   'ASSOC1','ASSOC2','ASSOC_TEV','CLASS1','Flags'
+
+sources = {}
+
+for row in data:
+  sources[row['Source_name']] = row
+
 
 class FGLSelector(TriggerSelector):
   
@@ -25,11 +44,13 @@ class FGLSelector(TriggerSelector):
                                           transient=True,title="Select source",
                                           initialHint="Select a source")
           self.root             = self.w.window
-          self.columns          = ['Name','Type','TS','RA (deg)','Dec (deg)']
-          self.columnsWidths    = [150,100,90,90,90]
+          self.columns          = ['Name','TS','Class1','RA (deg)','Dec (deg)',
+                                   'Assoc_1','Assoc_2','Assoc_TEV',
+                                   'Variab.index','Flags']
+          self.columnsWidths    = [150,80,60,90,90,150,150,150,120,60]
           self.tree             = None
           
-          self._setup_widgets(False)
+          self._setup_widgets(True)
           self.root.protocol("WM_DELETE_WINDOW", self.done)
         pass
     pass
@@ -56,12 +77,17 @@ class FGLSelector(TriggerSelector):
           
           thisRa                  = coords['ra']
           thisDec                 = coords['dec']
-          
-          self.data.append([ source.get("name").replace(" ",""), 
-                        source.get("type"),
-                        source.get("TS_value"),
-                        thisRa,
-                        thisDec])
+          name                    = source.get("name")
+          self.data.append([ name.replace(" ",""),
+                        "%.3f" % float(source.get("TS_value")),
+                        sources[name]["CLASS1"],
+                        "%.3f" % float(thisRa),
+                        "%.3f" % float(thisDec),
+                        sources[name]['ASSOC1'],
+                        sources[name]['ASSOC2'],
+                        sources[name]['ASSOC_TEV'],
+                        sources[name]['Variability_index'],
+                        sources[name]['Flags']])
           
         else:
           
