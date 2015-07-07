@@ -37,6 +37,16 @@ thisCommand.addParameter("source_model",'''Spectral model for the new source (GR
                                            commandDefiner.MANDATORY,
                                          'PowerLaw2',
                                          possiblevalues=LikelihoodComponent.availableSourceSpectra.keys())
+thisCommand.addParameter("fgl_mode",
+'''"fast" = include FGL sources in or around ROI giving at least 1 photons in this
+time interval if at their normal flux (use only for GRBs and SFs).
+This will turn in a big speed improvement in the likelihood
+analysis.\n
+"complete" = include all FGL sources in or around ROI''',
+                                           commandDefiner.OPTIONAL,
+                                         'complete',
+                                         possiblevalues=['fast','complete'])
+
 
 thisCommand.addParameter("ft2file","Spacecraft file (FT2)",commandDefiner.OPTIONAL,partype=commandDefiner.DATASETFILE,extension="fits")
 thisCommand.addParameter("xmlmodel","Name for the output file for the XML model",commandDefiner.MANDATORY,partype=commandDefiner.OUTPUTFILE,extension="xml")
@@ -99,6 +109,7 @@ def run(**kwargs):
     xmlmodel                    = thisCommand.getParValue('xmlmodel')
     triggername                 = thisCommand.getParValue('triggername')
     ft2file                     = thisCommand.getParValue('ft2file')
+    fglmode                     = thisCommand.getParValue('fgl_mode')
     clobber                     = _yesOrNoToBool(thisCommand.getParValue('clobber'))
     verbose                     = _yesOrNoToBool(thisCommand.getParValue('verbose'))
   except KeyError as err:
@@ -161,6 +172,14 @@ def run(**kwargs):
   xml                          = LikelihoodComponent.LikelihoodModel()
   xml.addSources(*modelsToUse)
   xml.writeXML(xmlmodel)
+  
+  if(fglmode=='complete'):
+    
+    #Use a very large delta T so that 
+    #all FGL sources are included in the
+    #xml model
+    deltat                     = 1e12
+  
   xml.add2FGLsources(ra,dec,float(roi)+8.0,xmlmodel,deltat)
     
   
