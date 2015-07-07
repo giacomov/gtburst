@@ -367,12 +367,12 @@ class catalog_2FGL(object):
       spatialModel            = source.findall('spatialModel')[0]
       
       #Remove point sources which cannot contribute any photon given the exposure
-      #aeff                    = 0.6e4 #cm2
-      #npred                   = float(source.get('Flux1000'))*exposure*aeff
-      #if(source.get('type')=='PointSource' and npred < 0.1):
-      #  root.remove(source)
-      #  continue
-      #pass
+      aeff                    = 0.6e4 #cm2
+      npred                   = float(source.get('Flux1000'))*exposure*aeff
+      if(source.get('type')=='PointSource' and npred < 0.1):
+        root.remove(source)
+        continue
+      pass
       
       if(source.get('type')=='PointSource'):
         #Get coordinates of this point source
