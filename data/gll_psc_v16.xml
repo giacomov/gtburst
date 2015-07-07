@@ -3802,7 +3802,7 @@
       <parameter free="0" max="90" min="-90" name="DEC" scale="1" value="35.8975"/>
     </spatialModel>
   </source>
-<source Energy_Flux100="0.000245050401878" Flux1000="2.71449742952e-08" Flux_Density="1.83367115627e-11" Npred="10187.1775075" Pivot_Energy="1000.0" PowerLaw_Index="1.64" Spectral_Index="-1.64" Variability_Index="0.0" name="3FGL J0534.5+2201i" type="PointSource">
+<source Energy_Flux100="0.000245050401878" Flux1000="2.71449742952e-08" Flux_Density="1.83367115627e-11" Npred="10187.1775075" Pivot_Energy="1000.0" PowerLaw_Index="1.64" Spectral_Index="-1.64" Variability_Index="0.0" TS_value="283.592674806" name="3FGL J0534.5+2201i" type="PointSource">
     <spectrum normPar="Prefactor" type="PowerLaw">
       <parameter free="0" max="100000" min="1e-05" name="Prefactor" scale="1e-13" value="165.5652886"/>
       <parameter free="0" max="5" min="0" name="Index" scale="-1" value="1.64"/>
