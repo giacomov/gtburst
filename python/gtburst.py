@@ -1176,12 +1176,13 @@ class GUI(object):
     #self.cleanUserInteractionFrame()
     thisWindow                = SubWindow(self.root,
                                           transient=True,title="Download data",
-                                          initialHint="Please insert information on the source you want to analyze" +
-                                                      " or select it by clicking on the 'Select source' button")    
+                                          initialHint="Please insert information on the source you want to analyze")    
     thisWindow.bottomtext.config(state="normal")
+    thisWindow.hyperlinkManager= HyperlinkManager(thisWindow.bottomtext)
+    thisWindow.bottomtext.insert(END,"\n\n")
     thisWindow.bottomtext.image_create(END, image=self.lightbulb)
-    thisWindow.bottomtext.insert(END, "Please insert information on the source you want to analyze" +
-                                      " or select it by clicking on the 'Select source' button")
+    thisWindow.bottomtext.insert(END, "You can find MUCH more information on the ")
+    thisWindow.bottomtext.insert(END, "FSSC website",thisWindow.hyperlinkManager.add(lambda: self.openWebLink('http://fermi.gsfc.nasa.gov/ssc/data/access/lat/4yr_catalog/')))
     thisWindow.bottomtext.config(state="disabled")
     #Create two labels and two entries
     #colWidth                  = 60
