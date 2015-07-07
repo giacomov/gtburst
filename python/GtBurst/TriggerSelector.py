@@ -88,8 +88,9 @@ class TriggerSelector(object):
         if(parent!=None):
           #Graphic mode
           self.w                = SubWindow(self.parent,
-                                          transient=True,title="Select trigger",
-                                          initialHint="Select a trigger")
+                                          transient=True,title="Select source",
+                                          initialHint="Select a source")
+                    
           self.root             = self.w.window
           self.columns          = ['Name','Trigger time (MET)','Type','RA (deg)','Dec (deg)','Error radius (deg)','Localizing instrument']
           self.columnsWidths    = [120,150,90,90,90,150,170]
@@ -173,7 +174,7 @@ class TriggerSelector(object):
           triggerTypes          = list(set(map(lambda x:x[2],self.data)))
           triggerTypes.sort()
           triggerTypes.insert(0,'All')
-          self.filter           = EntryPoint(self.filterFrame,labeltext="Trigger type filter: ",
+          self.filter           = EntryPoint(self.filterFrame,labeltext="Type filter: ",
                                              textwidth=20,possibleValues=triggerTypes)
           self.filter.variable.trace('w',lambda name, index, mode, sv=self.filter.variable: self.apply_filter(sv))
         pass
@@ -200,7 +201,7 @@ class TriggerSelector(object):
         try:
           item                    = self.tree.selection()[0]
         except:
-          showerror("No selection done","You have to select a trigger!",parent=self.root)
+          showerror("No selection done","You have to select an entry!",parent=self.root)
           return
         pass
       pass
