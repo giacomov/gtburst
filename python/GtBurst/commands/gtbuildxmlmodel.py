@@ -44,7 +44,7 @@ This will turn in a big speed improvement in the likelihood
 analysis.\n
 "complete" = include all FGL sources in or around ROI''',
                                            commandDefiner.OPTIONAL,
-                                         'complete',
+                                         'fast',
                                          possiblevalues=['fast','complete'])
 
 
