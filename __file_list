@@ -21,7 +21,7 @@ c4d4c51bd81c11eb768a735ea00fdcf6 *python/GtBurst/commands/gtllesrc.py
 c0cad6b8b44ad9ba8f9ea97615151d95 *python/GtBurst/commands/gtllebkg.py
 1cf4b528b4de1fe5c61c88685fc6ca0a *python/GtBurst/commands/gtinteractiveRaDec.py
 f74af9601eb205bbb9bd3dda0761e65c *python/GtBurst/commands/gtdotsmap.py
-e5bc24c1c2cbccdeb61b7781c88736e0 *python/GtBurst/commands/gtbuildxmlmodel.py
+6c97568d88f40ba65598b3bff1b7e6e9 *python/GtBurst/commands/gtbuildxmlmodel.py
 7b648f63e791eb247df0ced2d30b2dab *python/GtBurst/commands/gtconvertxmlmodel.py
 5e9c9c7fc9cecff212e701ac4ab2c27b *python/GtBurst/commands/gtdosed.py
 ee7756b69209acff0473751261e6e301 *python/GtBurst/commands/gteditxmlmodel.py
@@ -37,7 +37,7 @@ ee7756b69209acff0473751261e6e301 *python/GtBurst/commands/gteditxmlmodel.py
 557ef31a5a2e04e15473bbf66837aaa8 *python/GtBurst/commands/gtllesrcbindef.py
 aa0b472f87836e81f88e0c9d6bc44644 *python/GtBurst/commands/__init__.py
 8e7dfe3e4725e0cd5b3ca7fb889e0945 *python/GtBurst/commands/gtdosimulation.py
-31a7b4b208bcdd0c715f736642b7e07a *python/GtBurst/version.py
+965c726c559e7de5d408b81a302abf2b *python/GtBurst/version.py
 30a8fa18fc8cde59cd514ac1b81d6a6a *python/GtBurst/getGBMfiles.py
 9666b6e8e3f406ec26d8e8086b056bb3 *python/GtBurst/dataHandling.py
 550adcd6b58d635ce54bcce945dca6e9 *python/GtBurst/IRFS.py
