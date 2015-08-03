@@ -45,7 +45,9 @@ def findGalacticTemplate(irfname,ra,dec,rad):
     name,ext                  = os.path.basename(templ).split(".")
     newName                   = name+"_cut.%s" % ext
     cutout.cutout(templ,ra,dec,'equatorial',rad,newName,True)
-    return os.path.abspath(os.path.join('.',newName))
+    
+    return newName
+    #return os.path.abspath(os.path.join('.',newName))
 pass
 
 def findIsotropicTemplate(irfname):
