@@ -866,7 +866,7 @@ class LLEData(object):
       
       for interval in timeIntervals.getIntervals():
         #Find all spectra between start and stop
-        mask                  = (spectraStop >= interval.tstart) & (spectraStart <= interval.tstop)
+        mask                  = (spectraStop >= interval.tstart) & (spectraStart <= interval.tstop) & (spectraExposure > 0)
         
         #Compute the weight for each interval: the weight will be 1 for intervals
         #completely contained between tstart and tstop, and < 1 for the first and
@@ -1172,6 +1172,7 @@ class LATData(LLEData):
       dec                              = float(dec)
       emin                             = float(emin)
       emax                             = float(emax)
+      zenithCut                        = float(zenithCut)
       
       
       #Check that the FT2 file covers the time interval requested
@@ -1202,7 +1203,16 @@ class LATData(LLEData):
       if(gtmktime):
         self.gtmktime['scfile']          = self.ft2File
         if(self.strategy=="time"):
-          filt                           = "(DATA_QUAL>0 || DATA_QUAL==-1) && LAT_CONFIG==1 && IN_SAA!=T && LIVETIME>0 && (ANGSEP(RA_ZENITH,DEC_ZENITH,%s,%s)<=(%s-%s))" %(ra,dec,zenithCut,rad)
+          filt                           = "(DATA_QUAL>0 || DATA_QUAL==-1) && LAT_CONFIG==1 && IN_SAA!=T && LIVETIME>0"
+          
+          if(zenithCut < 180):
+            
+            filt                        += " && (ANGSEP(RA_ZENITH,DEC_ZENITH,%s,%s)<=(%s-%s))" %(ra,dec,zenithCut,rad)
+          
+          else:
+            
+            print("\nNo Zenith cut used\n")
+            
           self.gtmktime['roicut']        = "no"
         elif(self.strategy=="events"):
           filt                           = "(DATA_QUAL>0 || DATA_QUAL==-1) && LAT_CONFIG==1 && IN_SAA!=T && LIVETIME>0"
