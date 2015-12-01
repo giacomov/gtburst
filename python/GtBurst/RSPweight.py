@@ -70,7 +70,7 @@ class EventsCounter(object):
       if((tstart < min(self.eventTimes)) or (tstop > max(self.eventTimes))):
         raise RuntimeError("Tstart and tstop out of boundaries")
       
-      thisMask                = (self.eventTimes >= tstart) & (self.eventTimes <= tstop) & self.goodDataMask
+      thisMask                = (self.eventTimes >= tstart) & (self.eventTimes <= tstop)
       nEvents                 = len(thisMask.nonzero()[0])
     
     elif(self.inputFile=="cspec"):
