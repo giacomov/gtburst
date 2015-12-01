@@ -37,7 +37,7 @@ ee7756b69209acff0473751261e6e301 *python/GtBurst/commands/gteditxmlmodel.py
 557ef31a5a2e04e15473bbf66837aaa8 *python/GtBurst/commands/gtllesrcbindef.py
 aa0b472f87836e81f88e0c9d6bc44644 *python/GtBurst/commands/__init__.py
 8e7dfe3e4725e0cd5b3ca7fb889e0945 *python/GtBurst/commands/gtdosimulation.py
-23ee20e6da21a63ca4a75c20f599f6f0 *python/GtBurst/version.py
+6b0a5be3b638267517f6c229b9c626c9 *python/GtBurst/version.py
 30a8fa18fc8cde59cd514ac1b81d6a6a *python/GtBurst/getGBMfiles.py
 c03ff549394dc58e8a7fe037f60ef1a7 *python/GtBurst/dataHandling.py
 550adcd6b58d635ce54bcce945dca6e9 *python/GtBurst/IRFS.py
@@ -45,7 +45,7 @@ c03ff549394dc58e8a7fe037f60ef1a7 *python/GtBurst/dataHandling.py
 59e6ee6c77e50cdd128fb21b8fb47251 *python/GtBurst/cutout.py
 b53da58159c5a848fc6ea5b83f84d213 *python/GtBurst/interactivePlots.py
 95df53bc5ef48567d19d313971d1d5c9 *python/GtBurst/Treeview.py
-16e4f47becf88a889cde41faf57cfe4a *python/GtBurst/RSPweight.py
+6ba6d25aa87ab74c53d06dac7ccb4d19 *python/GtBurst/RSPweight.py
 9c42b9e782e43e57d4a68ac2fa713efa *python/GtBurst/fancyFileDialogs.py
 8d8c1d5e543910c331e2e05848574536 *python/GtBurst/xmlModelGUI.py
 55cd3bedf6104bfb7f53c7e8d8a1e3be *python/GtBurst/getDataPath.py
