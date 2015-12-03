@@ -92,15 +92,28 @@ def fromEvclassToIRF(rep,event_class):
       pass
     pass
     
-    evclass                   = pow(2,32-exponent-1)
+    if exponent is not None:
+      
+      evclass                   = pow(2,32-exponent-1)
     
-    #Check if this evclass is in IRFS. Remember that the IRFS dictionary is modified
-    #according to the source of data. If the data come from the FSSC, the two Pass8
-    #transient100 classes are removed, for example
+      #Check if this evclass is in IRFS. Remember that the IRFS dictionary is modified
+      #according to the source of data. If the data come from the FSSC, the two Pass8
+      #transient100 classes are removed, for example
+      
+      irf_ = filter(lambda irf:IRFS[irf].evclass==evclass, PROCS[rep])
+      
+      if len(irf_)==0:
+         
+         #Even though the event would have been a standard irf, that standard irf
+         #is not contained in the public dataset. Hence, mark it still as unrecognized
+         #by putting exponent=None, so that in the next if clause we check if it is a
+         #solar flare class
+         
+         exponent = None
+      
     
-    irf_ = filter(lambda irf:IRFS[irf].evclass==evclass, PROCS[rep])
     
-    if len(irf_)==0:
+    if exponent is None:
       
       #This might be Solar Flare classes, which are not
       #"contained" within the normal selection
