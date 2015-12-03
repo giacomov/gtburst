@@ -92,18 +92,29 @@ def fromEvclassToIRF(rep,event_class):
       pass
     pass
     
-    if(exponent is None):
+    evclass                   = pow(2,32-exponent-1)
+    
+    #Check if this evclass is in IRFS. Remember that the IRFS dictionary is modified
+    #according to the source of data. If the data come from the FSSC, the two Pass8
+    #transient100 classes are removed, for example
+    
+    irf_ = filter(lambda irf:IRFS[irf].evclass==evclass, PROCS[rep])
+    
+    if len(irf_)==0:
+      
       #This might be Solar Flare classes, which are not
-      #"contained" within the transient 100S selection
+      #"contained" within the normal selection
       for i in range(15,21):
         if(event_class[i]==True):
           exponent            = i
           break
         pass
       pass
+      
+      evclass                   = pow(2,32-exponent-1)
+      
     pass
     
-    evclass                   = pow(2,32-exponent-1)
   pass
   
   irfsForThisRepr             = PROCS[rep]
