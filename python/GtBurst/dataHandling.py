@@ -5,6 +5,7 @@ import UnbinnedAnalysis
 import BinnedAnalysis
 
 import numpy
+import random
 import os,sys, re, glob, shutil, datetime, time
 import pyfits
 import math
@@ -26,6 +27,10 @@ from GtBurst.commands.gtllebin import gtllebin
 from GtBurst import version
 from GtBurst import angularDistance
 
+from uw.utilities.xml_parsers import parse_sources
+import uw.like.roi_monte_carlo
+import os
+
 #Use a backend which does not require a running X server,
 #so commands will be able to run in batch mode
 #(Note that this call is uneffective when dataHandling is imported
@@ -38,6 +43,10 @@ matplotlib.rcParams['font.size'] = 8
 
 #Version tag
 moduleVersion                 = version.getVersion()
+
+# Read configuration
+
+configuration                      = Configuration()
 
 #Definitions
 eventsExtName                 = "EVENTS"
@@ -104,6 +113,41 @@ def exceptionPrinter(msg,exceptionText):
     sys.stderr.write("\n%s\n" % msg)
     sys.stderr.write("\n%s\n" % exceptionText)
     sys.stderr.write("-------------- EXCEPTION ---------------------------\n")      
+
+def convertXML(gtlikexml,obssimxml,emin,emax):
+  ps,ds=parse_sources(gtlikexml)
+  sources = ps
+  sources.extend(ds)
+  directory = os.path.dirname(obssimxml)
+  if(directory==''):
+    directory = os.path.abspath('.')
+  else:
+    directory = os.path.abspath(directory)
+  pass
+  
+  mc = uw.like.roi_monte_carlo.MCModelBuilder(sources,
+                                              savedir=directory,
+                                              emin=float(emin),
+                                              emax=float(emax))
+  swap = mc.build(obssimxml)
+    
+  # Return the list of the sources contained in the file
+  
+  source_names = map(lambda x:x.name, sources)
+  
+  fgl_sources = filter(lambda x:x.find("FGL ")>=0, source_names)
+  fgl_sources = map(lambda x:"_%s" % x.replace(" ","_").replace("-","m").replace("+","p").replace(".",""),
+                    fgl_sources)
+  
+  other_sources = filter(lambda x:x.find("FGL ")<0, source_names)
+  
+    
+  all_sources = other_sources
+  all_sources.extend(fgl_sources)
+    
+  return all_sources
+  
+pass
 
 
 def getLATdataFromDirectory(directory):
@@ -388,6 +432,32 @@ def _getLatestVersion(filename):
     return os.path.join(directory,fileList[idx])
 pass
 
+def convertTemplatesToAbsolutePath(xmlmodel):
+  
+  tree                        = ET.parse(xmlmodel)
+  root                        = tree.getroot()
+  
+  for source in root.findall('source'):
+        
+    spectrum                = source.findall('spectrum')[0]
+    file_name               = spectrum.get('file')
+    
+    if file_name is not None:
+        
+        spectrum.set('file',os.path.abspath(file_name))
+    
+    spatialModel            = source.findall('spatialModel')[0]
+    file_name               = spatialModel.get('file')
+    
+    if file_name is not None:
+        
+        spatialModel.set('file',os.path.abspath(file_name))
+      
+  pass
+  
+  tree.write(xmlmodel)
+  
+pass
 
 def getIsotropicTemplateNormalization(xmlmodel):
   tree                        = ET.parse(xmlmodel)
@@ -919,7 +989,7 @@ class multiprocessScienceTools(dict):
   def __init__(self,scienceTool):
     #If there is more than one processor, use the multi-processor
     #version, otherwise the standard one
-    configuration                      = Configuration()
+    
     self.ncpus                         = min(int(float(configuration.get('maxNumberOfCPUs'))),multiprocessing.cpu_count()) #Save 1 processor for system usage
     if(self.ncpus > 1):
       self.run                         = self.multiproc_run
@@ -1031,7 +1101,7 @@ class my_gttsmap(multiprocessScienceTools):
   def multiproc_run(self):
     pars = {}
 
-    pars['evfile']            = self['evfile']
+    pars['evfile']            = os.path.abspath(self['evfile'])
     pars['scfile']            = self['scfile']
     pars['nxpix']             = self['nxpix']
     pars['nypix']             = self['nypix']
@@ -1304,6 +1374,7 @@ class LATData(LLEData):
       f[0].header.set('_EVTYPE',self.evtype)
       f[0].header.set('_IRF',"%s" % irf.name)
       f[0].header.set('_REPROC','%s' % reprocessingVersion)
+      f[0].header.set('_THETAC','%12.5f' %float(thetaCut))
       
       nEvents                          = len(f['EVENTS'].data.TIME)
       print("\nSelected %s events." %(nEvents))
@@ -1333,6 +1404,8 @@ class LATData(LLEData):
         self.evtype                 = int(h['_EVTYPE'])
       except:
         self.evtype                 = 'INDEF'
+      self.thetamax                 = float(h['_THETAC'])
+      
       f.close()
   pass
   
@@ -1456,7 +1529,7 @@ class LATData(LLEData):
        self.gtexpmap['evtype']         = self.evtype
      pass
      
-     self.gtexpmap['srcrad']        = (2*self.rad)
+     self.gtexpmap['srcrad']        = min(2*self.rad,88.0)
      #Guarantee that this is divisible by 4
      self.gtexpmap['nlong']         = 4*int(math.ceil(4*self.rad/binsz/4.0))
      self.gtexpmap['nlat']          = 4*int(math.ceil(4*self.rad/binsz/4.0))
@@ -1532,7 +1605,8 @@ class LATData(LLEData):
      self.gtsrcmaps['resample']     = 'no'
      self.gtsrcmaps['minbinsz']     = 1.0
      self.gtsrcmaps['psfcorr']      = 'no'
-     self.gtsrcmaps['emapbnds']     = 'no'     
+     self.gtsrcmaps['emapbnds']     = 'no'  
+     self.gtsrcmaps['ptsrc']        = 'no'  
      try:
        self.gtsrcmaps.run()
      except:
@@ -1699,8 +1773,11 @@ class LATData(LLEData):
      return phafile,rspfile,bakfile
   pass
   
-  def makeTSmap(self,xmlmodel,sourceName,binsz=0.7,side=None,outfile=None,tsltcube=None,tsexpomap=None):
+  def makeTSmap(self,xmlmodel,sourceName,binsz=0.7,
+                side=None,outfile=None,tsltcube=None,tsexpomap=None):
+     
      self.getCuts()
+     
      if(tsltcube==None or tsltcube==''):
        self.makeLivetimeCube()
      else:
@@ -1718,6 +1795,11 @@ class LATData(LLEData):
      #We have to produce a version of the xmlmodel without the source
      tempModel                      = "__temp__xml_tsmap.xml"
      removePointSource(xmlmodel,tempModel,sourceName)
+     
+     # We also need to put an absolute path for the templates
+     
+     convertTemplatesToAbsolutePath(tempModel)
+     
      self.gttsmap['srcmdl']         = tempModel
      self.gttsmap['statistic']      = "UNBINNED"
      self.gttsmap['optimizer']      = optimizer
@@ -2036,6 +2118,107 @@ class LATData(LLEData):
     return float(ra),float(dec),float(err)
   pass
   
+  def makeSimulation(self, gtlikexml, evroot='sim', seed=None, exclude=None):
+    
+    self.getCuts()
+    
+    # First transform the xmlfile from the gtlike to the
+    # gtobssim format
+    
+    obssimxml = '__obssim.xml'
+    
+    source_list = convertXML(gtlikexml, obssimxml, self.emin, self.emax)
+    
+    if exclude is not None:
+        
+        print("Excluding source %s... "%(exclude))
+        
+        source_list = filter(lambda x:x!=exclude, source_list)
+    
+    # Now write the source_list.txt file
+    
+    source_list_file = "__source_list.txt"
+    
+    with open(source_list_file, "w+") as f:
+        
+        f.write("\n".join(source_list))
+    
+    # Fix the XML for the $($SIMDIR) error (should be $(SIMDIR))
+    
+    with open(obssimxml) as f:
+        
+        lines = f.readlines()
+        
+        newlines = map(lambda x:x.replace("$($SIMDIR)","$(SIMDIR)"), lines)
+    
+    with open(obssimxml,"w+") as f:
+        
+        f.write("".join(newlines))
+    
+    self.gtobssim['infile'] = obssimxml
+    self.gtobssim['srclist'] = source_list_file
+    self.gtobssim['scfile'] = self.ft2File
+    self.gtobssim['evroot'] = evroot
+    self.gtobssim['simtime'] = self.tmax - self.tmin
+    self.gtobssim['tstart'] = self.tmin
+    self.gtobssim['use_ac'] = 'yes'
+    self.gtobssim['ra'] = self.ra
+    self.gtobssim['dec'] = self.dec
+    self.gtobssim['radius'] = self.rad
+    self.gtobssim['emin'] = 10
+    self.gtobssim['emax'] = self.emax
+    self.gtobssim['edisp'] = 'yes'
+    self.gtobssim['irfs'] = self.irf
+    self.gtobssim['maxrows'] = 10000000000
+    self.gtobssim['seed'] = random.randint(1000,1000000) if seed is None else seed
+    
+    # Define env. variable SIMDIR
+    
+    os.environ['SIMDIR'] = os.getcwd()
+    
+    # I need to run it from the shell because otherwise it 
+    # will use the default value for the
+    # evtype keyword, and will generate P7 events! (WTF)
+  
+    cmdLine = self.gtobssim.command()
+  
+    cmdLine = cmdLine.replace("time -p ","")
+    cmdLine = cmdLine.replace('evtype="none"',"")
+  
+    print("\n%s" %(cmdLine))
+    print subprocess.check_output(cmdLine,shell=True)
+
+    
+    # Here we assume that gtobssim produced only one file
+    
+    # Find file
+    
+    sim_event_file = glob.glob("%s_events_0*.fits" % evroot)
+    
+    assert len(sim_event_file)==1, "Zero or more than 1 file produced by gtobssim"
+    
+    sim_event_file = sim_event_file[0]
+    
+    # Fix some keywords
+    
+    with pyfits.open(sim_event_file,"update") as f:
+      
+        f[0].header.set("PROC_VER","302")
+    
+    # Now reproduce the same cuts used by the event file
+    
+    sim_event_class = LATData(sim_event_file, self.rspFile, self.ft2File)
+    
+    irf = self.irf.replace("_V6","").replace("P8R2","P8")
+    
+    sim_event_class.performStandardCut(self.ra, self.dec, self.rad, irf,
+                                       self.tstart, self.tstop,
+                                       self.emin, self.emax, self.zmax,
+                                       self.thetamax,
+                                       True,strategy=self.strategy)
+    
+    return sim_event_class
+    
 pass
 
 class Simulation(object):

@@ -370,11 +370,23 @@ class catalog_2FGL(object):
       
       #Remove point sources which cannot contribute any photon given the exposure
       aeff                    = 0.6e4 #cm2
-      npred                   = float(source.get('Flux1000'))*exposure*aeff
-      if(source.get('type')=='PointSource' and npred < 0.1):
-        root.remove(source)
-        continue
-      pass
+      
+      if(source.get('type')=='PointSource'):
+        
+        try:
+           
+            npred                   = float(source.get('Flux1000'))*exposure*aeff
+        
+        except TypeError:
+            
+            # This is not a 3FGL source, so it has no Flux1000 attribute. Keep it
+            
+            continue
+        
+        if npred < 0.1:
+           root.remove(source)
+           continue
+      
       
       if(source.get('type')=='PointSource'):
         #Get coordinates of this point source
@@ -407,8 +419,18 @@ class catalog_2FGL(object):
           srcs                 += 1
       elif(source.get('type')=='DiffuseSource'):
         #Get coordinates of the center of this diffuse source
-        thisRa                  = float(source.get('RA'))
-        thisDec                 = float(source.get('DEC'))
+        
+        try:
+        
+          thisRa                  = float(source.get('RA'))
+          thisDec                 = float(source.get('DEC'))
+        
+        except TypeError:
+          
+          # This is not a 3FGL source, keep it and continue
+          
+          continue
+          
         
         thisDist                = getAngularDistance(ra,dec,thisRa,thisDec)
 

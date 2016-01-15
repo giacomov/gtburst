@@ -64,6 +64,7 @@ parser.add_argument("--spectralfiles",help="Produce spectral files to be used in
 parser.add_argument("--liketype",help="Likelihood type (binned or unbinned)",type=str,default="unbinned",choices=['binned','unbinned'])
 parser.add_argument("--optimizeposition",help="Optimize position with gtfindsrc?",type=str,default="no",choices=['yes','no'])
 parser.add_argument("--datarepository",help="Directory where data are stored",default=configuration.get('dataRepository'))
+parser.add_argument("--ltcube",help="Pre-computed livetime cube",default='',type=str)
 
 #Main code
 if __name__=="__main__":
@@ -202,6 +203,17 @@ if __name__=="__main__":
     targs['optimizeposition']    = 'no'
     targs['ft2file']             = dataset['ft2file']
     targs['skymap']              = skymap
+    
+    if args.ltcube!='':
+      
+      if not os.path.exists(args.ltcube):
+           
+           raise IOError("Livetime cube %s does not exists!" %(args.ltcube))
+      
+      targs['ltcube']              = args.ltcube
+    
+    pass 
+    
     printCommand("gtdolike.py",targs)
     (_, outfilelike, _, grb_TS, 
      _, bestra, _, bestdec, 
