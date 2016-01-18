@@ -27,10 +27,6 @@ from GtBurst.commands.gtllebin import gtllebin
 from GtBurst import version
 from GtBurst import angularDistance
 
-from uw.utilities.xml_parsers import parse_sources
-import uw.like.roi_monte_carlo
-import os
-
 #Use a backend which does not require a running X server,
 #so commands will be able to run in batch mode
 #(Note that this call is uneffective when dataHandling is imported
@@ -43,10 +39,6 @@ matplotlib.rcParams['font.size'] = 8
 
 #Version tag
 moduleVersion                 = version.getVersion()
-
-# Read configuration
-
-configuration                      = Configuration()
 
 #Definitions
 eventsExtName                 = "EVENTS"
@@ -115,6 +107,11 @@ def exceptionPrinter(msg,exceptionText):
     sys.stderr.write("-------------- EXCEPTION ---------------------------\n")      
 
 def convertXML(gtlikexml,obssimxml,emin,emax):
+  
+  from uw.utilities.xml_parsers import parse_sources
+  import uw.like.roi_monte_carlo
+
+  
   ps,ds=parse_sources(gtlikexml)
   sources = ps
   sources.extend(ds)
@@ -989,6 +986,11 @@ class multiprocessScienceTools(dict):
   def __init__(self,scienceTool):
     #If there is more than one processor, use the multi-processor
     #version, otherwise the standard one
+    
+    # Read configuration
+
+    configuration                      = Configuration()
+
     
     self.ncpus                         = min(int(float(configuration.get('maxNumberOfCPUs'))),multiprocessing.cpu_count()) #Save 1 processor for system usage
     if(self.ncpus > 1):
