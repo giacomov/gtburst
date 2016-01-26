@@ -35,13 +35,35 @@ def getDetectorAngle(ra_scx,dec_scx,ra_scz,dec_scz,sourceRa,sourceDec,detector):
 pass
 
 
-def getAngularDistance(ra1,dec1,ra2,dec2):
+def getAngularDistance(ra1, dec1, ra2, dec2):
+    
+    # Vincenty formula, stable also at antipodes
+    
+    lon1, lat1, lon2, lat2 = np.deg2rad([ra1, dec1, ra2, dec2])
+    
+    sdlon = np.sin(lon2 - lon1)
+    cdlon = np.cos(lon2 - lon1)
+    slat1 = np.sin(lat1)
+    slat2 = np.sin(lat2)
+    clat1 = np.cos(lat1)
+    clat2 = np.cos(lat2)
+
+    num1 = clat2 * sdlon
+    num2 = clat1 * slat2 - slat1 * clat2 * cdlon
+    denominator = slat1 * slat2 + clat1 * clat2 * cdlon
+
+    return np.rad2deg(np.arctan2(np.sqrt(num1 ** 2 + num2 ** 2), denominator))
+
+def getAngularDistance_old(ra1,dec1,ra2,dec2):
+
   dlat = np.deg2rad(dec2 - dec1)
   dlon = np.deg2rad(ra2 - ra1)
   dec1 = np.deg2rad(dec1)
   dec2 = np.deg2rad(dec2)
   a = np.sin(dlat/2.)*np.sin(dlat/2.) + np.cos(dec1)*np.cos(dec2)*np.sin(dlon/2.)*np.sin(dlon/2.)
+  
   c  = 2*np.arctan2(np.sqrt(a), np.sqrt(1.-a))
+  
   return np.rad2deg(c)
 
 def _getNaIDirection(self,detectors):
