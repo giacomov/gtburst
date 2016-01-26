@@ -37,7 +37,7 @@ ee7756b69209acff0473751261e6e301 *python/GtBurst/commands/gteditxmlmodel.py
 557ef31a5a2e04e15473bbf66837aaa8 *python/GtBurst/commands/gtllesrcbindef.py
 aa0b472f87836e81f88e0c9d6bc44644 *python/GtBurst/commands/__init__.py
 8e7dfe3e4725e0cd5b3ca7fb889e0945 *python/GtBurst/commands/gtdosimulation.py
-627bc7050d33a172a5b381607bc60ae2 *python/GtBurst/version.py
+d6a4142992f0182f8d4e1a40cadd8343 *python/GtBurst/version.py
 30a8fa18fc8cde59cd514ac1b81d6a6a *python/GtBurst/getGBMfiles.py
 0b8c2fc999d235bb731bb556fc6c726f *python/GtBurst/dataHandling.py
 f163cb15a10d6fc518c40e0405db1f5c *python/GtBurst/IRFS.py
@@ -97,7 +97,7 @@ af2a9eaa712bfae58e5affc83053b72b *python/GtBurst/aplpy/__init__.py
 1e3365a277caac474ba9ad2df5008ab7 *python/GtBurst/Configuration.py
 abf24bfc1271768d9a979cf007f6126c *python/GtBurst/scripts/applyBayesianBlocks.py
 9f663be4b18362bee39b920834692f8b *python/GtBurst/scripts/doTimeResolvedLike.py
-6895a68993d46b36a9ccbeb2defaa65f *python/GtBurst/angularDistance.py
+7266d06354ce909e2933e8de88b5b0e8 *python/GtBurst/angularDistance.py
 b311bc547eecd27963c7690557f678fe *python/GtBurst/InteractiveFt1Display.py
 5019aebaed3cb0c98b8193c7bdaea6ee *python/GtBurst/TriggerSelector.py
 aa0b472f87836e81f88e0c9d6bc44644 *python/GtBurst/__init__.py
