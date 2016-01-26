@@ -32,15 +32,19 @@ class Configuration(object):
       pass  
       
       #Now test that we can actually write there
-      try:
-        testFile                        = os.path.join(targetDir,'__pyBurstWriteTest')
-        f                               = open(testFile,'w+')
-        f.write("TEST\n")
-        f.close()
-        os.remove(testFile)
-      except:
-        print("WARNING: it seems that directory %s is not writeable by you. Fix this or use the environment variable %s to point to a writeable directory" %(targetDir,configDirEnvVariable))
-      pass
+      #try:
+      
+      #  testFile                        = os.path.join(targetDir,'__pyBurstWriteTest')
+      #  f                               = open(testFile,'w+')
+      #  f.write("TEST\n")
+      #  f.close()
+      #  os.remove(testFile)
+      
+      #except:
+      
+      #  print("WARNING: it seems that directory %s is not writeable by you. Fix this or use the environment variable %s to point to a writeable directory" %(targetDir,configDirEnvVariable))
+      
+      #pass
       
       self.configurationFile            = os.path.join(targetDir,configurationFileName)
       
