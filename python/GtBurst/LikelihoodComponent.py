@@ -595,6 +595,7 @@ class LikelihoodResultsPrinter(object):
           #Upper limit for point sources not in the 2FGL (i.e., the GRB)
           #Fixing the photon index to -2
           import UpperLimits
+                    
           if(phIndexForUL!=-2):
             index                 = phIndexForUL
             conv                  = (1.+index)/(2.0+index)*(pow(self.emax,index+2)-pow(self.emin,index+2))/(pow(self.emax,index+1)-pow(self.emin,index+1))
@@ -603,6 +604,11 @@ class LikelihoodResultsPrinter(object):
             conv                  = (self.emin)*(self.emax)/(self.emax-self.emin)*numpy.log(self.emax/self.emin)
           self.likelihoodObj[sourceName].src.spectrum().parameter('Index').setValue(index)
           self.likelihoodObj[sourceName].src.spectrum().parameter('Index').setFree(0)
+          
+          # New for ST-10-01-01: we have to do the fit again otherwise the photon index will not really be fixed.
+          
+          self.likelihoodObj.fit()
+          
           ulc                   = UpperLimits.UpperLimits(self.likelihoodObj)
           ul,integr             = ulc[sourceName].bayesianUL(emin=self.emin, emax=self.emax,cl=0.95)          
           ule                   = ul*conv
