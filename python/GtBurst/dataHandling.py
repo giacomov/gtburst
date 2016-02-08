@@ -1406,7 +1406,11 @@ class LATData(LLEData):
         self.evtype                 = int(h['_EVTYPE'])
       except:
         self.evtype                 = 'INDEF'
-      self.thetamax                 = float(h['_THETAC'])
+      
+      try:
+        self.thetamax                 = float(h['_THETAC'])
+      except:
+        self.thetamax               = 180.0
       
       f.close()
   pass
@@ -1608,7 +1612,7 @@ class LATData(LLEData):
      self.gtsrcmaps['minbinsz']     = 1.0
      self.gtsrcmaps['psfcorr']      = 'no'
      self.gtsrcmaps['emapbnds']     = 'no'  
-     self.gtsrcmaps['ptsrc']        = 'no'  
+     self.gtsrcmaps['ptsrc']        = 'yes'  
      try:
        self.gtsrcmaps.run()
      except:
