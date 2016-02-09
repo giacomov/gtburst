@@ -10,6 +10,9 @@ import os, subprocess, glob, shutil
 import numpy,pyfits
 import collections
 
+import xml.etree.ElementTree as ET
+
+
 def printCommand(cmdname,targs):
   commandLine = cmdname
   
@@ -65,6 +68,7 @@ parser.add_argument("--liketype",help="Likelihood type (binned or unbinned)",typ
 parser.add_argument("--optimizeposition",help="Optimize position with gtfindsrc?",type=str,default="no",choices=['yes','no'])
 parser.add_argument("--datarepository",help="Directory where data are stored",default=configuration.get('dataRepository'))
 parser.add_argument("--ltcube",help="Pre-computed livetime cube",default='',type=str)
+parser.add_argument('--ulphindex',help="Photon index for upper limits",default=-2,type=float)
 
 #Main code
 if __name__=="__main__":
@@ -191,6 +195,35 @@ if __name__=="__main__":
     targs['source_model']        = 'powerlaw2'
     printCommand("gtbuildxmlmodel",targs)
     _,xmlmodel                   = gtbuildxmlmodel.run(**targs)
+    
+    # Now if the user has specified a specific photon index for upper limits,
+    # change the photon index in the XML file
+    
+    # Save parameters in comments (ET will strip them out)
+    
+    pars_in_comments = {}
+    
+    for key in ['OBJECT','RA','DEC','IRF']:
+        
+        pars_in_comments[key] = dataHandling._getParamFromXML(xmlmodel,key)
+    
+    # Now change the photon index in the XML file
+        
+    tree = ET.parse(xmlmodel)
+    root = tree.getroot()
+    index = root.findall("./source[@name='%s']/spectrum/parameter[@name='Index']" % 'GRB')[0]
+    
+    if args.ulphindex==-1.0:
+        
+        args.ulphindex += 0.01
+    
+    index.set('value', str(args.ulphindex))
+    
+    tree.write(xmlmodel)
+    
+    # Add the parameters in comments back
+    
+    dataHandling._writeParamIntoXML(xmlmodel,**pars_in_comments)
     
     targs                        = {}
     targs['spectralfiles']       = args.spectralfiles
