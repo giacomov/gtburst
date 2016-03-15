@@ -1390,7 +1390,7 @@ class GUI(object):
           #The user hit cancel
           return
         
-        LATdownloader.setCuts(ra,dec,60.0,float(triggerTime),float(triggerTime)-1000,float(triggerTime)+howManySeconds,'MET')
+        LATdownloader.setCuts(ra,dec,60.0,float(triggerTime),float(triggerTime)-5000,float(triggerTime)+howManySeconds,'MET')
       except:
         showerror("Error downloading data from FTP","Could not download data for trigger %s. Reason:\n\n '%s' \n\n." %(triggerName,sys.exc_info()[1]),parent=self.root)
       else:

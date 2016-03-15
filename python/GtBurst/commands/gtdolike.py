@@ -32,6 +32,9 @@ thisCommand.addParameter("liketype","Likelihood type",commandDefiner.OPTIONAL,"u
 thisCommand.addParameter("clobber","Overwrite output file? (possible values: 'yes' or 'no')",commandDefiner.OPTIONAL,"yes")
 thisCommand.addParameter("verbose","Verbose output (possible values: 'yes' or 'no')",commandDefiner.OPTIONAL,"yes")
 thisCommand.addParameter("figure","Matplotlib figure for the interactive mode",commandDefiner.OPTIONAL,None,partype=commandDefiner.PYTHONONLY)
+thisCommand.addParameter("flemin","Lower bound energy for flux or upper limit computation", commandDefiner.OPTIONAL,100,partype=commandDefiner.PYTHONONLY)
+thisCommand.addParameter("flemax","Upper bount energy for flux or upper limit computation", commandDefiner.OPTIONAL,1000,partype=commandDefiner.PYTHONONLY)
+
 
 GUIdescription                = "Here you will perform a likelihood analysis on the data you selected in the first step,"
 GUIdescription               += " using the model you selected in the 2nd step."
@@ -88,6 +91,8 @@ def run(**kwargs):
     liketype                    = thisCommand.getParValue('liketype')
     clobber                     = _yesOrNoToBool(thisCommand.getParValue('clobber'))
     verbose                     = _yesOrNoToBool(thisCommand.getParValue('verbose'))
+    flemin                      = thisCommand.getParValue('flemin')
+    flemax                      = thisCommand.getParValue('flemax')
     
     figure                      = thisCommand.getParValue('figure')
   except KeyError as err:
@@ -104,7 +109,7 @@ def run(**kwargs):
   LATdata                     = dataHandling.LATData(eventfile,rspfile,ft2file)
   try:
     if(liketype=='unbinned'):
-      outfilelike, sources        = LATdata.doUnbinnedLikelihoodAnalysis(xmlmodel,tsmin,expomap=expomap,ltcube=ltcube)
+      outfilelike, sources        = LATdata.doUnbinnedLikelihoodAnalysis(xmlmodel,tsmin,expomap=expomap,ltcube=ltcube,emin=flemin,emax=flemax)
     else:
       #Generation of spectral files and optimization of the position is
       #not supported yet for binned analysis
@@ -119,7 +124,7 @@ def run(**kwargs):
         print("\nWARNING: you specified optimize=yes, but position optimization is not supported for binned analysis\n") 
         optimize                    = 'no'
       
-      outfilelike, sources        = LATdata.doBinnedLikelihoodAnalysis(xmlmodel,tsmin,expomap=expomap,ltcube=ltcube)
+      outfilelike, sources        = LATdata.doBinnedLikelihoodAnalysis(xmlmodel,tsmin,expomap=expomap,ltcube=ltcube,emin=flemin,emax=flemax)
   except GtBurstException as gt:
     raise gt
   except:

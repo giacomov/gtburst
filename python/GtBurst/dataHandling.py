@@ -192,6 +192,7 @@ def getPointing(triggertime,ft2,bothAxes=False):
   #Find first element after trigger time in FT2 file
   idx_after               = numpy.searchsorted(numpy.sort(data.START),triggertime)
   idx_before              = idx_after-1
+    
   if(idx_after==len(data) or idx_before < 0):
     raise RuntimeError("Provided FT2 file do not cover enough time")
   f.close()
@@ -1293,7 +1294,7 @@ class LATData(LLEData):
           raise RuntimeError("Strategy must be either 'time' or 'events'")
         
         if(thetaCut!=180.0):
-          filt                          += " && (ANGSEP(RA_SCZ,DEC_SCZ,%s,%s)<=%s)" %(ra,dec,thetaCut)
+          filt                          += " && (ANGSEP(RA_SCZ,DEC_SCZ,%s,%s)<=%s - %s)" %(ra,dec,thetaCut, rad)
         pass
         
         self.gtmktime['filter']          = filt
@@ -1425,7 +1426,7 @@ class LATData(LLEData):
      self.gtbin['outfile']          = outfile
      self.gtbin['algorithm']        = 'CMAP'
      
-     nxpix                          = int(2*float(self.rad)/float(binsz))
+     nxpix                          = int(2*float(self.rad)/float(binsz)) + 1
      nypix                          = nxpix
      if(fullsky):
        nxpix                        = 360.0/float(binsz)
@@ -1848,14 +1849,21 @@ class LATData(LLEData):
   pass
   
   def doBinnedLikelihoodAnalysis(self,xmlmodel,tsmin=20,**kwargs):
+     
      expomap                        = None
      ltcube                         = None
+     emin = None
+     emax = None
+     
      for k,v in kwargs.iteritems():
        if(k=='expomap'):
          expomap                    = v
        elif(k=='ltcube'):
          ltcube                     = v
-       pass
+       elif(k=='emin' and v is not None):
+         emin = float(v)
+       elif(k=='emax' and v is not None):
+         emax = float(v)
      pass
      self.getCuts()
      if(ltcube==None or ltcube==''):
@@ -1887,16 +1895,28 @@ class LATData(LLEData):
                                                   expCube=self.livetimeCube,
                                                   binnedExpMap=self.binnedExpoMap,
                                                   irfs=self.irf)
-     self.like1                     = BinnedAnalysis.BinnedAnalysis(self.obs,xmlmodel,optimizer='NEWMINUIT')
+     self.like1                     = BinnedAnalysis.BinnedAnalysis(self.obs,xmlmodel,optimizer='Minuit')
      
-     return self._doLikelihood(xmlmodel,tsmin)
+     if emin is None:
+         
+         emin = self.emin
+     
+     if emax is None:
+         
+         emax = self.emax
+     
+     return self._doLikelihood(xmlmodel,tsmin, emin, emax)
   
   pass
   
   def doUnbinnedLikelihoodAnalysis(self,xmlmodel,tsmin=20,**kwargs):
+    
      expomap                        = None
      ltcube                         = None
      dogtdiffrsp                    = True
+     emin = None
+     emax = None
+     
      for k,v in kwargs.iteritems():
        if(k=='expomap'):
          expomap                    = v
@@ -1904,7 +1924,10 @@ class LATData(LLEData):
          ltcube                     = v
        elif(k=='dogtdiffrsp'):
          dogtdiffrsp                = bool(v)
-       pass
+       elif(k=='emin' and v is not None):
+         emin = float(v)
+       elif(k=='emax' and v is not None):
+         emax = float(v)
      pass
      self.getCuts()
      if(ltcube==None or ltcube==''):
@@ -1934,12 +1957,20 @@ class LATData(LLEData):
      self.obs                       = UnbinnedAnalysis.UnbinnedObs(self.eventFile,self.ft2File,
                                                   expMap=self.exposureMap,
                                                   expCube=self.livetimeCube,irfs=self.irf)
-     self.like1                     = UnbinnedAnalysis.UnbinnedAnalysis(self.obs,xmlmodel,optimizer='NEWMINUIT')
+     self.like1                     = UnbinnedAnalysis.UnbinnedAnalysis(self.obs,xmlmodel,optimizer='Minuit')
      
-     return self._doLikelihood(xmlmodel,tsmin)
+     if emin is None:
+         
+         emin = self.emin
+     
+     if emax is None:
+         
+         emax = self.emax
+     
+     return self._doLikelihood(xmlmodel,tsmin, emin, emax)
   pass
    
-  def _doLikelihood(self,xmlmodel,tsmin):
+  def _doLikelihood(self,xmlmodel,tsmin, emin, emax):
      
      outfilelike                    = "%s_likeRes.xml" %(self.rootName)
      
@@ -2017,6 +2048,31 @@ class LATData(LLEData):
      #like1.ftol                     = 1e-10
      print("\nLikelihood settings:\n")
      print(self.like1)
+     
+     # Check that we have at least a number of photons equal to the number of parameters
+     
+     n_events = self.like1.total_nobs()
+     
+     n_free_params = self.like1.logLike.getNumFreeParams()
+          
+     if n_free_params >= n_events:
+              
+         # More parameters than events!
+                  
+         print("You have more free parameters than events! Fixing everything except the normalizations")
+         
+         norm_parameters = []
+         
+         for src_name in self.like1.sourceNames():
+             
+             for par in self.like1.freePars(src_name):
+                 
+                 if par.getName() != self.like1.normPar(src_name).getName():
+                     
+                     self.like1[src_name].src.spectrum().parameter(par.getName()).setFree(0)
+         
+         self.like1.syncSrcParams()
+     
      print("\nPerforming likelihood fit...")
      try:
        logL                         = self.like1.fit(verbosity=1,covar=True)
@@ -2067,7 +2123,9 @@ class LATData(LLEData):
        pass
      pass
      
-     printer                        = LikelihoodComponent.LikelihoodResultsPrinter(self.like1,self.emin,self.emax)
+     
+     
+     printer                        = LikelihoodComponent.LikelihoodResultsPrinter(self.like1,emin,emax)
      detectedSources                = printer.niceXMLprint(outfilelike,tsmin,phIndex_beforeFit)
      print("\nLog(likelihood) = %s" %(logL))
      
@@ -2097,7 +2155,7 @@ class LATData(LLEData):
     self.gtfindsrc['expmap']        = self.exposureMap
     self.gtfindsrc['srcmdl']        = tmpxml
     self.gtfindsrc['target']        = sourceName
-    self.gtfindsrc['optimizer']     = 'NEWMINUIT'
+    self.gtfindsrc['optimizer']     = 'Minuit'
     self.gtfindsrc['ftol']          = 1E-10
     self.gtfindsrc['reopt']         = 'yes'
     self.gtfindsrc['atol']          = 1E-3

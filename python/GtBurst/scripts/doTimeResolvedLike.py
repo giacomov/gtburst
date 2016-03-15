@@ -69,6 +69,8 @@ parser.add_argument("--optimizeposition",help="Optimize position with gtfindsrc?
 parser.add_argument("--datarepository",help="Directory where data are stored",default=configuration.get('dataRepository'))
 parser.add_argument("--ltcube",help="Pre-computed livetime cube",default='',type=str)
 parser.add_argument('--ulphindex',help="Photon index for upper limits",default=-2,type=float)
+parser.add_argument('--flemin',help="Lower bound energy for flux/upper limit computation",default=None)
+parser.add_argument('--flemax',help="Upper bound energy for flux/upper limit computation",default=None)
 
 #Main code
 if __name__=="__main__":
@@ -236,6 +238,8 @@ if __name__=="__main__":
     targs['optimizeposition']    = 'no'
     targs['ft2file']             = dataset['ft2file']
     targs['skymap']              = skymap
+    targs['flemin']              = args.flemin
+    targs['flemax']              = args.flemax
     
     if args.ltcube!='':
       
@@ -267,6 +271,13 @@ if __name__=="__main__":
     
     os.chdir(initialWorkdir)
   pass
-  writeSourceListToFile(results,args.outfile)
+  
+  try:
+  
+      writeSourceListToFile(results,args.outfile)
+  
+  except IOError:
+      
+      print("Looks like the analysis has failed. No output file produced!")
 pass
 
