@@ -37,9 +37,9 @@ ee7756b69209acff0473751261e6e301 *python/GtBurst/commands/gteditxmlmodel.py
 557ef31a5a2e04e15473bbf66837aaa8 *python/GtBurst/commands/gtllesrcbindef.py
 aa0b472f87836e81f88e0c9d6bc44644 *python/GtBurst/commands/__init__.py
 8e7dfe3e4725e0cd5b3ca7fb889e0945 *python/GtBurst/commands/gtdosimulation.py
-b6f1c7d85b712a749b1b6ff7c2134ff2 *python/GtBurst/version.py
+1596387989b82accf1e1fa4efa59014a *python/GtBurst/version.py
 30a8fa18fc8cde59cd514ac1b81d6a6a *python/GtBurst/getGBMfiles.py
-51c47b9def4355f1d06552e1ad8c1257 *python/GtBurst/dataHandling.py
+fda7fa4b36fcf0d3b9b69df5fe502e3b *python/GtBurst/dataHandling.py
 f163cb15a10d6fc518c40e0405db1f5c *python/GtBurst/IRFS.py
 32db9f3e23ff1423ed622a5989598fdf *python/GtBurst/dataCollector.py
 59e6ee6c77e50cdd128fb21b8fb47251 *python/GtBurst/cutout.py
