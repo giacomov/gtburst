@@ -1667,7 +1667,13 @@ class LATData(LLEData):
      #This try/except is to preserve compatibility with the
      #old science tools, which didn't have the evtype parameter
      if( 'evtype' in self.gtdiffrsp.keys() ):
-       self.gtdiffrsp['evtype']         = self.evtype
+     
+       # Use INDEF so the evtype is guessed from the event file
+       
+       self.gtdiffrsp['evtype']         = 'INDEF'
+       
+       self.gtdiffrsp['evclsmin']       = 'INDEF'
+       self.gtdiffrsp['evclass']        = 'INDEF'
      pass
      
      self.gtdiffrsp['clobber']      = 'yes'
@@ -2137,7 +2143,7 @@ class LATData(LLEData):
   
   def optimizeSourcePosition(self,xmlmodel,sourceName='GRB'):
     self.getCuts()
-    
+        
     #Create a temporary xml file, otherwise gtfindsrc will overwrite the original one
     tmpxml                      = "__temp__xmlmodel.xml"
     try:
@@ -2166,9 +2172,15 @@ class LATData(LLEData):
     stdin, stdout                   = self.gtfindsrc.runWithOutput()
     ra,dec,err                      = None,None,None
     for line in stdout.readlines():
+      
+      #print line
+      
       if(line.find("Best fit position:")>=0):
+                
         ra,dec                      = line.split(":")[1].replace(" ","").split(",")
+      
       elif(line.find("Error circle radius:")>=0):
+                
         err                         = line.split(":")[1].replace(" ","")
       pass
     pass
@@ -2179,7 +2191,33 @@ class LATData(LLEData):
       os.remove(tmpxml)
     except:
       pass
-    return float(ra),float(dec),float(err)
+     
+    # In some weird cases, gtfindsrc returns R.A., Dec pairs outside of the ranges
+    # 0 < RA < 360, -90 < Dec < 90. It happens because gtfindsrc makes steps starting from
+    # the center position, so for example if you start from R.A. close to zero it 
+    # could go negative. Fix that
+    
+    ra = float(ra)
+    dec = float(dec)
+    err = float(err)
+    
+    if ra < 0:
+        
+        ra = ra + 360
+    
+    if ra > 360:
+        
+        ra = ra - 360
+    
+    if dec < -90:
+        
+        dec = -90 + (abs(dec) - 90)
+    
+    if dec > 90:
+        
+        dec = 90 - (abs(dec) - 90)
+    
+    return ra, dec, err
   pass
   
   def makeSimulation(self, gtlikexml, evroot='sim', seed=None, exclude=None):
