@@ -1031,7 +1031,7 @@ class my_gtltcube(multiprocessScienceTools):
   pass
   
   def multiproc_run(self):
-    #return self.singleproc_run()
+    return self.singleproc_run()
     
     #Get the length of the time interval
     data                               = pyfits.getdata(self['evfile'],'EVENTS')
