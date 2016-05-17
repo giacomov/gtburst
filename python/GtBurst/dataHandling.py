@@ -2487,6 +2487,14 @@ class CspecBackground(object):
     ebounds                   = f["EBOUNDS"].data
     
     chanNumbers               = ebounds.field("CHANNEL")
+    
+    if self.instrume.lower()=='gbm':
+        
+        # Fix the number of channels, which starts at 0 in the CSPEC
+        # but at 1 in the RSP. Make all start at 1
+        
+        chanNumbers += 1
+    
     emin                      = ebounds.field("E_MIN")
     emax                      = ebounds.field("E_MAX")
     self.channels             = []
@@ -2535,7 +2543,7 @@ class CspecBackground(object):
   pass
   
   def getBackgroudSpectrum(self,bkgTimeIntervals,srcTimeIntervals):
-    
+        
     #Transform bkgTimeIntervals and srcTimeIntervals in lists,
     #if they are not already (this allow the user to specify both a single
     #interval and a list of intervals)
