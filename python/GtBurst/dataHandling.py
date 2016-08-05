@@ -2086,53 +2086,56 @@ class LATData(LLEData):
     def _doLikelihood(self, xmlmodel, tsmin, emin, emax):
 
         outfilelike = "%s_likeRes.xml" % (self.rootName)
-
-        # Add a Gaussian prior for the GalacticTemplate component (it should be either the
-        # isotropic template for Source class or the BKGE)
-        # Open the XML to read in the statistical and systematic errors
-        # f                              = open(xmlmodel)
-
-        tree = ET.parse(xmlmodel)
-        _root = tree.getroot()
+        
         sysErr = None
         statErr = None
-
-        # Get Isotropic DOM
-        gal = _root.findall("./source[@name='GalacticTemplate']")
-
-        if (len(gal) == 0):
-
-            # No isotropic template
-            print("\nNo isotropic template found in the XML file!")
-
-        else:
-
-            gal = gal[0]
-
-            ps = gal.findall("./spectrum/parameter")
-
-            if (len(ps) == 0):
-                raise RuntimeError("Malformed XML file! The Galactic template source has no parameters!")
-
-            param = ps[0]
-
-            if (param.get('free') == '0'):
-                # Parameter is fixed, do not add prior (which would cause an error in minuit)
-                print("Galactic template is fixed, not using any prior on it.")
-
+        
+        if False:
+        
+            # Add a Gaussian prior for the GalacticTemplate component (it should be either the
+            # isotropic template for Source class or the BKGE)
+            # Open the XML to read in the statistical and systematic errors
+            # f                              = open(xmlmodel)
+    
+            tree = ET.parse(xmlmodel)
+            _root = tree.getroot()
+    
+            # Get Isotropic DOM
+            gal = _root.findall("./source[@name='GalacticTemplate']")
+    
+            if (len(gal) == 0):
+    
+                # No isotropic template
+                print("\nNo isotropic template found in the XML file!")
+    
             else:
-
-                total_error = 0.1
-
-                print("\nApplying a Gaussian prior with sigma %s on the normalization of the Galactic Template" % (
-                total_error))
-                idx = self.like1.par_index("GalacticTemplate", "Value")
-                self.like1[idx].addGaussianPrior(1.0, total_error)
-                print self.like1[idx].getPriorParams()
-
-
+    
+                gal = gal[0]
+    
+                ps = gal.findall("./spectrum/parameter")
+    
+                if (len(ps) == 0):
+                    raise RuntimeError("Malformed XML file! The Galactic template source has no parameters!")
+    
+                param = ps[0]
+    
+                if (param.get('free') == '0'):
+                    # Parameter is fixed, do not add prior (which would cause an error in minuit)
+                    print("Galactic template is fixed, not using any prior on it.")
+    
+                else:
+    
+                    total_error = 0.1
+    
+                    print("\nApplying a Gaussian prior with sigma %s on the normalization of the Galactic Template" % (
+                    total_error))
+                    idx = self.like1.par_index("GalacticTemplate", "Value")
+                    self.like1[idx].addGaussianPrior(1.0, total_error)
+                    print self.like1[idx].getPriorParams()
+    
+    
+                pass
             pass
-        pass
 
         # Find the name of the GRB
 

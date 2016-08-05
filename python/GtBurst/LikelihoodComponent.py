@@ -132,7 +132,7 @@ def DiffuseSrcTemplateFunc(irf, ra, dec, rad):
 
     spectrum = '''
    <spectrum type="ConstantValue">
-     <parameter free="1" max="10.0" min="0.0" name="Value" scale="1.0" value= "1.0"/>
+     <parameter free="1" max="1.3" min="0.7" name="Value" scale="1.0" value= "1.0"/>
    </spectrum>
     '''
     completeExpression = '<source name="diffuse source template" type="DiffuseSource">%s\n%s\n</source>' % (
@@ -165,7 +165,7 @@ def IsotropicTemplateFunc(irf):
 
     spectrum = '''
    <spectrum file="%s" type="FileFunction">
-      <parameter free="1" max="1000" min="1e-05" name="Normalization" scale="1" value="1" />
+      <parameter free="1" max="1.5" min="0.5" name="Normalization" scale="1" value="1" />
    </spectrum>
     ''' % (findIsotropicTemplate(irf))
 
@@ -379,8 +379,7 @@ pass
 
 class IsotropicTemplate(TemplateFile):
     def __init__(self, irf):
-        TemplateFile.__init__(self, "IsotropicTemplate", irf, IsotropicTemplateFunc, 0.1)
-
+        TemplateFile.__init__(self, "IsotropicTemplate", irf, IsotropicTemplateFunc, 0.1)        
     pass
 
 
