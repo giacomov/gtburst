@@ -668,20 +668,23 @@ class GUI(object):
     self.userInteractionFrame.bind("<Configure>", self.OnFrameConfigure2)
     
     self.figureFrame          = Frame(self.root)
-    self.figureFrame.grid(row=0,column=1,rowspan=2,sticky='nsew')
     self.figure               = Figure(dpi=100,figsize=(7.0,4))
     self.canvas               = FigureCanvasTkAgg(self.figure,
                                         master=self.figureFrame)
-    self.canvas.get_tk_widget().grid(column=0,row=0,sticky='nsew')
+
     bigLogo                   = image.imread(os.path.join(self.dataPath,"glast_logo.png"))
     axes                      = self.figure.add_subplot(111)
     axes.set_axis_off()
     axes.imshow(bigLogo)
-    self.canvas.show()    
+
     self.figToolbar           = NavigationToolbar2TkAgg(self.canvas,self.figureFrame)
     self.figToolbar.update()
     self.canvas._tkcanvas.pack(side=TOP,fill=BOTH,expand=True)
-    
+
+    self.canvas.get_tk_widget().pack()
+    self.figureFrame.grid(row=0, column=1, rowspan=2, sticky='nsew')
+    self.canvas.show()
+
     #Set up the form for the dataset
     rightSubFrames            = []
     rightLabels               = []
