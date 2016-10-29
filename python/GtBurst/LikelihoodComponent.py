@@ -31,9 +31,9 @@ availableSourceSpectra['Gaussian'] = Gaussian
 availableSourceSpectra['PLSuperExpCutoff'] = PLSuperExpCutoff
 
 
-def findGalacticTemplate(irfname, ra, dec, rad):
+def findGalacticTemplate(irfname, ra, dec, rad, cutout_name=None):
     irf = IRFS.IRFS[irfname]
-
+        
     templ = findTemplate(irf.galacticTemplate)
     if (templ == None):
         raise GtBurstException.GtBurstException(61,
@@ -43,7 +43,15 @@ def findGalacticTemplate(irfname, ra, dec, rad):
         print("\nFound Galactic template for IRF. %s: %s" % (irfname, templ))
         print("\nCutting the template around the ROI: \n")
         name, ext = os.path.basename(templ).split(".")
-        newName = name + "_cut.%s" % ext
+        
+        if cutout_name is None:
+            
+            newName = name + "_cut.%s" % ext
+        
+        else:
+            
+            newName = cutout_name
+        
         cutout.cutout(templ, ra, dec, 'equatorial', rad, newName, True)
 
         return newName
@@ -123,12 +131,12 @@ def findTemplate(options):
 pass
 
 
-def DiffuseSrcTemplateFunc(irf, ra, dec, rad):
+def DiffuseSrcTemplateFunc(irf, ra, dec, rad, cutout_name=None):
     diffuse = '''
    <spatialModel file="%s" type="MapCubeFunction">
      <parameter free="0" max="1000.0" min="0.001" name="Normalization" scale= "1.0" value="1.0"/>
    </spatialModel>
-    ''' % (findGalacticTemplate(irf, ra, dec, rad))
+    ''' % (findGalacticTemplate(irf, ra, dec, rad, cutout_name=cutout_name))
 
     spectrum = '''
    <spectrum type="ConstantValue">
@@ -367,9 +375,9 @@ pass
 
 
 class GalaxyAndExtragalacticDiffuse(TemplateFile):
-    def __init__(self, irf, ra, dec, rad):
+    def __init__(self, irf, ra, dec, rad, cutout_name=None):
         TemplateFile.__init__(self, "GalacticTemplate", irf,
-                              lambda irf: DiffuseSrcTemplateFunc(irf, ra, dec, rad))
+                              lambda irf: DiffuseSrcTemplateFunc(irf, ra, dec, rad, cutout_name=cutout_name))
 
     pass
 
