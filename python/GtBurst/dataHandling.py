@@ -1441,9 +1441,18 @@ class LATData(LLEData):
         pass
 
         self.gtselect['evclass'] = irf.evclass
-        self.gtselect['evclsmin'] = 0
-        self.gtselect['evclsmax'] = 1000
-
+        
+        try:
+        
+            self.gtselect['evclsmin'] = 0
+            self.gtselect['evclsmax'] = 1000
+        
+        except KeyError:
+            
+            # This happens with the new version of the ST (> 11-00-00)
+            # do nothing, these parameters were here for Pass 6 compatibility (they are useless)
+            pass
+        
         # This try/except is to preserve compatibility with the
         # old science tools, which didn't have the evtype parameter
         if ('evtype' in self.gtselect.keys()):
