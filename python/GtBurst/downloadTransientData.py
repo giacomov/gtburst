@@ -72,9 +72,9 @@ class DownloadTransientData(dataCollector):
     
     urllib.urlcleanup() 
     try:
-      urllib.urlretrieve("http://fermi.gsfc.nasa.gov/cgi-bin/ssc/LAT/LATDataQuery.cgi",temporaryFileName)
+      urllib.urlretrieve("https://fermi.gsfc.nasa.gov/cgi-bin/ssc/LAT/LATDataQuery.cgi",temporaryFileName)
     except socket.timeout:
-      raise GtBurstException(11,"Time out when connecting to the server. Check your internet connection, or that you can access http://fermi.gsfc.nasa.gov, then retry")
+      raise GtBurstException(11,"Time out when connecting to the server. Check your internet connection, or that you can access https://fermi.gsfc.nasa.gov, then retry")
     except:
       raise GtBurstException(1,"Problems with the download. Check your connection then retry")
     pass
@@ -94,7 +94,7 @@ class DownloadTransientData(dataCollector):
         
     os.remove(temporaryFileName)
     if(maxTimeLimit.replace(" ","")==''):
-      raise GtBurstException(12,"The LAT data server is probably down for maintenance or loading new data. Check the page http://fermi.gsfc.nasa.gov/cgi-bin/ssc/LAT/LATDataQuery.cgi or retry later.")
+      raise GtBurstException(12,"The LAT data server is probably down for maintenance or loading new data. Check the page https://fermi.gsfc.nasa.gov/cgi-bin/ssc/LAT/LATDataQuery.cgi or retry later.")
     else:
       maxTimeLimit              = float(maxTimeLimit)
     pass
@@ -115,14 +115,14 @@ class DownloadTransientData(dataCollector):
     #Re-implementing this
     
     #This will complete automatically the form available at
-    #http://fermi.gsfc.nasa.gov/cgi-bin/ssc/LAT/LATDataQuery.cgi
+    #https://fermi.gsfc.nasa.gov/cgi-bin/ssc/LAT/LATDataQuery.cgi
     #After submitting the form, an html page will inform about
     #the identifier assigned to the query and the time which will be
     #needed to process it. After retrieving the query number,
     #this function will wait for the files to be completed on the server,
     #then it will download them
     
-    url                         = "http://fermi.gsfc.nasa.gov/cgi-bin/ssc/LAT/LATDataQuery.cgi"
+    url                         = "https://fermi.gsfc.nasa.gov/cgi-bin/ssc/LAT/LATDataQuery.cgi"
     #Save parameters for the query in a dictionary
     parameters                  = {}
     parameters['coordfield']    = "%s,%s" %(self.ra,self.dec)
@@ -154,9 +154,9 @@ class DownloadTransientData(dataCollector):
                        temporaryFileName, 
                        lambda x,y,z:0, postData)
     except socket.timeout:
-      raise GtBurstException(11,"Time out when connecting to the server. Check your internet connection, or that you can access http://fermi.gsfc.nasa.gov, then retry")
+      raise GtBurstException(11,"Time out when connecting to the server. Check your internet connection, or that you can access https://fermi.gsfc.nasa.gov, then retry")
     except:
-      raise GtBurstException(1,"Problems with the download. Check your connection or that you can access http://fermi.gsfc.nasa.gov, then retry.")
+      raise GtBurstException(1,"Problems with the download. Check your connection or that you can access https://fermi.gsfc.nasa.gov, then retry.")
     pass
     
     #Now open the file, parse it and get the query ID
@@ -201,7 +201,14 @@ class DownloadTransientData(dataCollector):
       raise GtBurstException(1,"Problems with the download. Empty or wrong answer from the LAT server (see console). Please retry later.")
     pass
     
-    httpAddress                 = filter(lambda x:x.find("http://fermi.gsfc.nasa.gov") >=0,parser.data)[0]
+    try:
+    
+    	httpAddress                 = filter(lambda x:x.find("http://fermi.gsfc.nasa.gov") >=0,parser.data)[0]
+    
+    except IndexError:
+        
+        # Try https
+        httpAddress                 = filter(lambda x:x.find("https://fermi.gsfc.nasa.gov") >=0,parser.data)[0]
     
     #Now periodically check if the query is complete
     startTime                   = time.time()
@@ -245,12 +252,12 @@ class DownloadTransientData(dataCollector):
         urllib.urlcleanup()
         if(root!=None):
           root.destroy()
-        raise GtBurstException(11,"Time out when connecting to the server. Check your internet connection, or that you can access http://fermi.gsfc.nasa.gov, then retry")
+        raise GtBurstException(11,"Time out when connecting to the server. Check your internet connection, or that you can access https://fermi.gsfc.nasa.gov, then retry")
       except:
         urllib.urlcleanup()
         if(root!=None):
           root.destroy()
-        raise GtBurstException(1,"Problems with the download. Check your connection or that you can access http://fermi.gsfc.nasa.gov, then retry.")
+        raise GtBurstException(1,"Problems with the download. Check your connection or that you can access https://fermi.gsfc.nasa.gov, then retry.")
       pass
       
       f                         = open(fakeName)
@@ -290,7 +297,7 @@ class DownloadTransientData(dataCollector):
         for ff in filenames:
           try:
             self.makeLocalDir()
-            dataHandling.runShellCommand("wget %s%s -P %s" %("http://fermi.gsfc.nasa.gov/FTP/fermi/data/lat/queries/",ff,self.localRepository),True)
+            dataHandling.runShellCommand("wget %s%s -P %s" %("https://fermi.gsfc.nasa.gov/FTP/fermi/data/lat/queries/",ff,self.localRepository),True)
           except:
             raise e
           pass
