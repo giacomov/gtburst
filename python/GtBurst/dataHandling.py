@@ -377,6 +377,7 @@ def date2met(*kargs):
     if float(year) > 2008:    met += 1
     if float(met) > 362793601.0: met += 1  # June 2012 leap second
     if float(met) > 457401602.0: met += 1  # 2015 leap second
+    if float(met) > 504921604: met += 1 #2016 leap second
     return met
 
 
@@ -390,7 +391,8 @@ def met2date(MET, opt=None):
     if MET > 252460800:   MET = MET - 1  # end of 2008
     if MET > 362793601:   MET = MET - 1  # 2012 leap second
     if MET > 457401602:   MET = MET - 1  # 2015 leap second
-
+    if MET > 504921604:   MET = MET - 1  # 2016 leap second
+    
     metdate = datetime.datetime(2001, 1, 1, 0, 0, 0)
     dt = datetime.timedelta(seconds=float(MET))
     grb_date = metdate + dt
@@ -3800,11 +3802,11 @@ def findMaximumTSmap(tsmap, tsexpomap):
         # Note that the value of one pixel is valid from .5 to 1.5
         # Note also that the exposure map is larger than the TS map
         pixels = wcsexp.wcs_sky2pix([[ra, dec, 1]], 1)[0]
-        exposureHere = expmap[pixels[1] - 0.5, pixels[0] - 0.5]
-        exposureUp = expmap[pixels[1] - 0.5 - 1, pixels[0] - 0.5]
-        exposureDown = expmap[pixels[1] - 0.5 + 1, pixels[0] - 0.5]
-        exposureRight = expmap[pixels[1] - 0.5, pixels[0] - 0.5 - 1]
-        exposureLeft = expmap[pixels[1] - 0.5, pixels[0] - 0.5 + 1]
+        exposureHere = expmap[int(pixels[1] - 0.5), int(pixels[0] - 0.5)]
+        exposureUp = expmap[int(pixels[1] - 0.5) - 1, int(pixels[0] - 0.5)]
+        exposureDown = expmap[int(pixels[1] - 0.5) + 1, int(pixels[0] - 0.5)]
+        exposureRight = expmap[int(pixels[1] - 0.5), int(pixels[0] - 0.5) - 1]
+        exposureLeft = expmap[int(pixels[1] - 0.5), int(pixels[0] - 0.5) + 1]
         # print("Exposure: %s" %(exposureHere))
         if (exposureHere > 0 and
                     exposureUp > 0 and
