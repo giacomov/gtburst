@@ -381,7 +381,7 @@ def date2met(*kargs):
     return met
 
 
-def met2date(MET, opt=None):
+def met2date(MET, opt=None, doy=False):
     """
     converts a MET time into a date string, in format \"08-07-25 10:26:09\".
     If opt=="grbname", the GRB name format 080725434 is returned.
@@ -415,7 +415,15 @@ def met2date(MET, opt=None):
         pass
     except:
         pass
-    text = '%04d-%02d-%02d %02d:%02d:%02d (DOY:%03s)' % (yy, mm, dd, hr, mi, ss, doy)
+    
+    if doy:
+    
+        text = '%04d-%02d-%02d %02d:%02d:%02d (DOY:%03s)' % (yy, mm, dd, hr, mi, ss, doy)
+    
+    else:
+        
+        text = '%04d-%02d-%02d %02d:%02d:%02d' % (yy, mm, dd, hr, mi, ss)
+    
     return text
 
 
