@@ -149,12 +149,12 @@ def cutout(filename, ra_or_l, dec_or_b, coordsys, radius, outfile, clobber=True)
         #Find the pixel corresponding to (xc,yc-radius)
         coord                         = numpy.array([[xc],[yc-radius],[1]]).T
         res                           = wcs.wcs_sky2pix(coord,0)[0]
-        mask_ymax                     = res[1]
+        mask_ymax                     = int(numpy.ceil(res[1]))
         
         #Now find the pixel corresponding to (xc,yc+radius)
         coord                         = numpy.array([[xc],[yc+radius-180.0],[1]]).T
         res                           = wcs.wcs_sky2pix(coord,0)[0]
-        mask_ymin                     = res[1]
+        mask_ymin                     = int(numpy.floor(res[1]))
                 
         img[:,mask_ymin:mask_ymax,:]  = img[:,mask_ymin:mask_ymax,:]*0.0
         
