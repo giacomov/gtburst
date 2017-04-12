@@ -255,7 +255,7 @@ class BatchTsMap(object):
             except:
                 continue
             for i, j, ts in zip(ii, jj, ts_vals):
-                tsmap[0].data[j][i] = ts
+                tsmap[0].data[int(j)][int(i)] = ts
         tsmap.writeto(self.pars['outfile'], clobber=True)
                 
     def remove_tempfiles(self):
