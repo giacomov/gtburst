@@ -5,6 +5,7 @@ bf28ba1a47e19d4a8c3ae355a00b613c *python/GtBurst/SubWindow.py
 c28fe75217e6684c950c138f0f20bbf6 *python/GtBurst/gtapps_mp/gttsmap_mp.py
 f71dfccd883d5f65ee0680dd0182b507 *python/GtBurst/gtapps_mp/gtltcube_mp.py
 aa0b472f87836e81f88e0c9d6bc44644 *python/GtBurst/gtapps_mp/__init__.py
+83ca0b6a850a4e5297d0b8ab9336d918 *python/GtBurst/fast_ts_map.py
 adaa3e707ad5099a517172e05e4d3745 *python/GtBurst/downloadTransientData.py
 bb1e0badf954f86b8162272e27001e07 *python/GtBurst/updater.py
 85549e8d98a778475a74603f2913155d *python/GtBurst/AutoHideScrollbar.py
@@ -37,7 +38,7 @@ ee7756b69209acff0473751261e6e301 *python/GtBurst/commands/gteditxmlmodel.py
 557ef31a5a2e04e15473bbf66837aaa8 *python/GtBurst/commands/gtllesrcbindef.py
 aa0b472f87836e81f88e0c9d6bc44644 *python/GtBurst/commands/__init__.py
 8e7dfe3e4725e0cd5b3ca7fb889e0945 *python/GtBurst/commands/gtdosimulation.py
-d9aee3b437192ccce42f24d528cbd98f *python/GtBurst/version.py
+b3e57979636443ecc5b8cd05f4b0d903 *python/GtBurst/version.py
 30a8fa18fc8cde59cd514ac1b81d6a6a *python/GtBurst/getGBMfiles.py
 a16ad95ed1856f1c9b5de0173655336b *python/GtBurst/dataHandling.py
 f163cb15a10d6fc518c40e0405db1f5c *python/GtBurst/IRFS.py
@@ -96,7 +97,7 @@ af2a9eaa712bfae58e5affc83053b72b *python/GtBurst/aplpy/__init__.py
 6d5a6d4f89898037c4e519d816f194c5 *python/GtBurst/LikelihoodComponent.py
 1e3365a277caac474ba9ad2df5008ab7 *python/GtBurst/Configuration.py
 abf24bfc1271768d9a979cf007f6126c *python/GtBurst/scripts/applyBayesianBlocks.py
-d401b92f4167f5a199c799443bd08722 *python/GtBurst/scripts/doTimeResolvedLike.py
+82af732a4f93b49ac36a7b3296e00fcb *python/GtBurst/scripts/doTimeResolvedLike.py
 2c36953957ecc8ac1314ac82dc23df3a *python/GtBurst/scripts/rawdata2package.py
 7266d06354ce909e2933e8de88b5b0e8 *python/GtBurst/angularDistance.py
 b311bc547eecd27963c7690557f678fe *python/GtBurst/InteractiveFt1Display.py
