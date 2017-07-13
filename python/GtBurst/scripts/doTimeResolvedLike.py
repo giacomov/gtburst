@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+
+import UnbinnedAnalysis
+
 import argparse
 from GtBurst import IRFS
 from GtBurst.Configuration import Configuration
@@ -6,6 +9,7 @@ from GtBurst.commands import gtdocountsmap
 from GtBurst.commands import gtbuildxmlmodel
 from GtBurst.commands import gtdolike
 from GtBurst import dataHandling
+from GtBurst.fast_ts_map import FastTSMap
 import os, subprocess, glob, shutil
 import numpy,pyfits
 import collections
@@ -68,14 +72,25 @@ parser.add_argument("--liketype",help="Likelihood type (binned or unbinned)",typ
 parser.add_argument("--optimizeposition",help="Optimize position with gtfindsrc?",type=str,default="no",choices=['yes','no'])
 parser.add_argument("--datarepository",help="Directory where data are stored",default=configuration.get('dataRepository'))
 parser.add_argument("--ltcube",help="Pre-computed livetime cube",default='',type=str)
+parser.add_argument("--expomap",help="pre-computed exposure map",default='', type=str)
 parser.add_argument('--ulphindex',help="Photon index for upper limits",default=-2,type=float)
 parser.add_argument('--flemin',help="Lower bound energy for flux/upper limit computation",default=None)
 parser.add_argument('--flemax',help="Upper bound energy for flux/upper limit computation",default=None)
+parser.add_argument('--fgl_mode',help="Set 'complete' to use all FGL sources, set 'fast' to use only bright sources",default='fast')
+parser.add_argument("--tsmap_spec", help="A TS map specification of the type half_size,n_side. For example: '--tsmap_spec 0.5,8' makes a TS map 1 deg x 1 deg with 64 points", default=None)
 
 #Main code
 if __name__=="__main__":
   args                        = parser.parse_args()
-  print args.ra
+  
+  if args.ltcube!='':
+      
+      args.ltcube = os.path.abspath(os.path.expanduser(os.path.expandvars(args.ltcube)))
+  
+  if args.expomap!='':
+      
+      args.expomap = os.path.abspath(os.path.expanduser(os.path.expandvars(args.expomap)))
+  
   #Determine time intervals
   tstarts                     = numpy.array(map(lambda x:float(x.replace('\\',"")),args.tstarts.split(",")))
   tstops                      = numpy.array(map(lambda x:float(x.replace('\\',"")),args.tstops.split(",")))
@@ -193,6 +208,7 @@ if __name__=="__main__":
     targs['particle_model']      = particle_model
     targs['ra']                  = args.ra
     targs['dec']                 = args.dec
+    targs['fgl_mode']            = args.fgl_mode
     targs['ft2file']             = dataset['ft2file']
     targs['source_model']        = 'powerlaw2'
     printCommand("gtbuildxmlmodel",targs)
@@ -242,14 +258,20 @@ if __name__=="__main__":
     targs['flemax']              = args.flemax
     
     if args.ltcube!='':
-      
+            
       if not os.path.exists(args.ltcube):
            
            raise IOError("Livetime cube %s does not exists!" %(args.ltcube))
       
       targs['ltcube']              = args.ltcube
-    
-    pass 
+      
+    if args.expomap!='':
+            
+      if not os.path.exists(args.expomap):
+           
+           raise IOError("Exposure map %s does not exists!" %(args.expomap))
+      
+      targs['expomap']              = args.expomap
     
     printCommand("gtdolike.py",targs)
     (_, outfilelike, _, grb_TS, 
@@ -257,8 +279,67 @@ if __name__=="__main__":
      _, poserr, _, distance, 
      _, sources)                 = gtdolike.run(**targs)
     
+    # If the TS map is required, let's do it
+    
+    if args.tsmap_spec is not None:
+        
+        half_size,n_side = args.tsmap_spec.replace(" ","").split(",")
+        
+        # Get root of the name
+        root_name = os.path.splitext(os.path.basename(filteredeventfile))[0]
+        
+        # Find ltcube
+        
+        ltcubes = glob.glob("%s_ltcube.fit*" % root_name)
+        
+        assert len(ltcubes) == 1, "Couldn't find ltcube"
+        
+        ltcube = ltcubes[0]
+        
+        # Find expomap
+        
+        expmaps = glob.glob("%s_expomap.fit*" % root_name)
+        
+        assert len(expmaps) == 1, "Couldn't find exopmap"
+        
+        expmap = expmaps[0]
+        
+        # Find XML model output of gtdolike
+        xmls = glob.glob("%s_likeRes.xml" % root_name)
+        
+        assert len(xmls) == 1, "Couldn't find XML"
+        
+        xml_res = xmls[0]
+        
+        obs = UnbinnedAnalysis.UnbinnedObs(filteredeventfile, dataset['ft2file'], expMap=expmap, expCube=ltcube)
+        like = UnbinnedAnalysis.UnbinnedAnalysis(obs, xml_res, 'MINUIT')
+        
+        ftm = FastTSMap(like)
+        (bestra, bestdec), maxTS = ftm.search_for_maximum(args.ra, args.dec, float(half_size), int(n_side), verbose=False)
+        
+    
     #Now append the results for this interval
     grb                          = filter(lambda x:x.name.find("GRB")>=0,sources)[0]
+    
+    if args.tsmap_spec is not None:
+        
+        if maxTS > grb.TS:
+            
+            print("\n\n=========================================")
+            print(" Fast TS Map has found a better position")
+            print("=========================================\n\n")
+            
+            grb.ra                   = float(bestra)
+            grb.dec                  = float(bestdec)
+            grb.TS                   = float(maxTS)
+            
+            print("(R.A., Dec.) = (%.3f, %3f) with TS = %.2f\n" % (grb.ra, grb.dec, grb.TS))
+                 
+    else:
+        
+        # Do nothing, so that grb.ra and grb.dec will stay what they are already
+        pass
+    
     grb.name                     = args.triggername
     grb.tstart                   = t1
     grb.tstop                    = t2
