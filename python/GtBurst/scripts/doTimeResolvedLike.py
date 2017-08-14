@@ -329,8 +329,8 @@ if __name__=="__main__":
             print(" Fast TS Map has found a better position")
             print("=========================================\n\n")
             
-            grb.ra                   = float(bestra)
-            grb.dec                  = float(bestdec)
+            #grb.ra                   = float(bestra)
+            #grb.dec                  = float(bestdec)
             grb.TS                   = float(maxTS)
             
             print("(R.A., Dec.) = (%.3f, %3f) with TS = %.2f\n" % (grb.ra, grb.dec, grb.TS))
