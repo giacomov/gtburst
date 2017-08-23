@@ -528,7 +528,7 @@ def fixMatrixHDU(matrixHDU):
                                  col.start,col.dim,matrixHDU.data.field(col.name)))
   pass
 
-  newtable                    = pyfits.new_table(newcols,header=matrixHDU.header)
+  newtable                    = BinTableHDU.from_columns(newcols,header=matrixHDU.header)
   return newtable
 pass
 

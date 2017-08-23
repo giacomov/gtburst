@@ -589,10 +589,10 @@ def _makeDatasetsOutOfLATdata(ft1, ft2, grbName, tstart, tstop,
     emins_column = pyfits.Column(name='E_MIN', format='E', array=emins)
     emaxs_column = pyfits.Column(name='E_MAX', format='E', array=emaxs)
     cols = pyfits.ColDefs([emins_column, emaxs_column])
-    tbhdu = pyfits.new_table(cols)
+    tbhdu =  pyfits.BinTableHDU.from_columns(cols)
     tbhdu.header.set('EXTNAME', 'EBOUNDS')
     hdu = pyfits.PrimaryHDU(None)
-    fakematrixhdu = pyfits.new_table(pyfits.ColDefs([pyfits.Column(name="FAKE", format='E')]))
+    fakematrixhdu = pyfits.BinTableHDU.from_columns(pyfits.ColDefs([pyfits.Column(name="FAKE", format='E')]))
     fakematrixhdu.header.set('EXTNAME', "SPECRESP MATRIX")
     eboundsFilename = os.path.join(localRepository, "gll_cspec_tr_bn%s_v00.rsp" % (grbName))
     thdulist = pyfits.HDUList([hdu, tbhdu, fakematrixhdu])
@@ -3545,7 +3545,7 @@ class Spectra(object):
                                       backfileCol, respfileCol, ancrfileCol])
         pass
 
-        newTable = pyfits.new_table(coldefs)
+        newTable = pyfits.BinTableHDU.from_columns(coldefs)
 
         # Add the keywords required by the OGIP standard:
         # Set POISSERR=F because our errors are NOT poissonian!
@@ -3654,7 +3654,7 @@ class Spectra(object):
                                       exposureCol, qualityCol, timeCol, endtimeCol])
         pass
 
-        newTable = pyfits.new_table(coldefs)
+        newTable = pyfits.BinTableHDU.from_columns(coldefs)
 
         # Add the keywords required by the OGIP standard:
         # Set POISSERR=F because our errors are NOT poissonian!

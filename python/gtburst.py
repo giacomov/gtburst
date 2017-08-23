@@ -1164,7 +1164,7 @@ class GUI(object):
                 respfileCol = pyfits.Column(name='RESPFILE', format=frmt,
                                             array=respfileArr)
                 # Make a fake table
-                newtable = pyfits.new_table(pyfits.ColDefs([backfileCol, respfileCol]))
+                newtable = BinTableHDU.from_columns(pyfits.ColDefs([backfileCol, respfileCol]))
 
                 # Reopen the file and append the columns
                 f = pyfits.open(dataset['srcspectra'])
@@ -1177,7 +1177,7 @@ class GUI(object):
                     pass
                 else:
                     coldef = f['SPECTRUM', 1].columns + newtable.columns
-                    finalTable = pyfits.new_table(coldef, header=header)
+                    finalTable = BinTableHDU.from_columns(coldef, header=header)
                 pass
                 finalTable.header.set("POISSERR", True)
 
