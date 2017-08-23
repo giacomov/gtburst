@@ -14,7 +14,7 @@ from contextlib import contextmanager
 
 import BinnedAnalysis
 import UnbinnedAnalysis
-import pywcs
+from GtBurst.wcs_wrap import pywcs
 import scipy.optimize
 from GtBurst import IRFS
 from GtBurst import LikelihoodComponent

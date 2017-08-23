@@ -1,4 +1,8 @@
-import pyfits
+try:
+    import astropy.io.fits as pyfits
+except:
+    import pyfits
+
 import os
 
 from GtBurst.GtBurstException import GtBurstException

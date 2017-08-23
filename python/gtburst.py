@@ -24,7 +24,12 @@ import os, re
 import traceback
 import glob
 import webbrowser
-import pyfits, numpy
+try:
+    import astropy.io.fits as pyfits
+except:
+    import pyfits
+
+import numpy
 
 sys.stderr.write(".")
 

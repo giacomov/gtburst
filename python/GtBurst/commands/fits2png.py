@@ -5,7 +5,11 @@ mpl.use('Agg')
 from GtBurst import aplpy
 import matplotlib.pyplot as plt
 import sys
-import pyfits
+try:
+    import astropy.io.fits as pyfits
+except:
+    import pyfits
+
     
 def fitsToPNG(fitsfile,pngfile,vmin=None,vmax=None,**kwargs):
     #Display the TS map    

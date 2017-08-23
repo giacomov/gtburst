@@ -15,12 +15,17 @@ import matplotlib.pyplot as mpl
 import mpl_toolkits.axes_grid.parasite_axes as mpltk
 
 try:
-    import pyfits
+
+    try:
+        import astropy.io.fits as pyfits
+    except ImportError:
+        import pyfits
+
 except ImportError:
     raise Exception("pyfits is required for APLpy")
 
 try:
-    import pywcs
+    from GtBurst.wcs_wrap import pywcs
 except ImportError:
     raise Exception("pywcs is required for APLpy")
 
@@ -387,7 +392,8 @@ class FITSFigure(Layers, Regions, Deprecated):
         try:
             wcs = wcs_util.WCS(header, dimensions=dimensions, slices=slices)
         except:
-            raise Exception("An error occured while parsing the WCS information")
+            raise
+            #raise Exception("An error occured while parsing the WCS information")
 
         return data, header, wcs
 

@@ -1,7 +1,13 @@
 #! /usr/bin/env python
 
 import sys
-import os, pyfits, numpy, shutil
+import os
+try:
+    import astropy.io.fits as pyfits
+except:
+    import pyfits
+
+import numpy, shutil
 from GtBurst import commandDefiner
 available                     = True
 try:

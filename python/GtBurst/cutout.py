@@ -1,5 +1,9 @@
-import pyfits
-import pywcs
+try:
+    import astropy.io.fits as pyfits
+except:
+    import pyfits
+
+from GtBurst.wcs_wrap import pywcs
 import numpy
 from pyLikelihood import SkyDir
 from GtBurst.angularDistance import getAngularDistance

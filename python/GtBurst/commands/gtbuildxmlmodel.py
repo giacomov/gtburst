@@ -3,7 +3,12 @@
 from GtBurst import dataHandling
 from GtBurst import bkge
 import sys, copy
-import os, pyfits, numpy
+try:
+    import astropy.io.fits as pyfits
+except:
+    import pyfits
+
+import os, numpy
 from GtBurst import commandDefiner
 from GtBurst import LikelihoodComponent
 from GtBurst import dataHandling

@@ -1,4 +1,8 @@
-import pyfits
+try:
+    import astropy.io.fits as pyfits
+except:
+    import pyfits
+
 import sys
 import os, glob
 import shlex, subprocess, shutil

@@ -4,7 +4,11 @@
 
 import numpy
 import os,sys
-import pyfits
+try:
+    import astropy.io.fits as pyfits
+except:
+    import pyfits
+
 import math
 from GtApp import GtApp
 import scipy.optimize

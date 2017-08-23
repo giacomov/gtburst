@@ -3,7 +3,12 @@
 import sys
 import os
 from GtBurst import commandDefiner
-import pyfits, numpy,math
+try:
+    import astropy.io.fits as pyfits
+except:
+    import pyfits
+
+import numpy,math
 import re
 
 ################ Command definition #############################

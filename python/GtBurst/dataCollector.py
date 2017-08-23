@@ -1,7 +1,14 @@
 #This is a mother class to get GBM and LLE data files (lle, pha and rsp)
 #Author: giacomov@slac.stanford.edu
 
-import os,sys,glob,pyfits,string,errno,shutil
+import os,sys,glob,string,errno,shutil
+
+try:
+    import astropy.io.fits as pyfits
+except:
+    import pyfits
+
+
 from GtBurst.GtBurstException import GtBurstException
 import ftplib, socket
 import time

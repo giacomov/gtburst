@@ -1,6 +1,7 @@
 import numpy as np
-import pywcs
 
+from GtBurst.wcs_wrap import pywcs
+    
 from .logger import logger
 
 

@@ -1,7 +1,13 @@
 #! /usr/bin/env python
 
 import sys
-import os, pyfits, numpy
+import os
+try:
+    import astropy.io.fits as pyfits
+except:
+    import pyfits
+
+import numpy
 from GtBurst import commandDefiner
 from GtBurst import xmlModelGUI
 

@@ -2,7 +2,11 @@
 
 import sys
 import os
-import pyfits
+try:
+    import astropy.io.fits as pyfits
+except:
+    import pyfits
+
 from GtBurst import commandDefiner
 
 ################ Command definition #############################

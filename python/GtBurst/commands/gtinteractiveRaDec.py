@@ -3,7 +3,12 @@
 import sys
 import os
 from GtBurst import commandDefiner
-import pyfits, numpy
+try:
+    import astropy.io.fits as pyfits
+except:
+    import pyfits
+
+import numpy
 
 ################ Command definition #############################
 executableName                = "gtinteractiveRaDec"

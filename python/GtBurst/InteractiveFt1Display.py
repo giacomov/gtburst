@@ -1,6 +1,11 @@
 from GtBurst import aplpy
 import matplotlib.pyplot as plt
-import pyfits, time, numpy
+try:
+    import astropy.io.fits as pyfits
+except:
+    import pyfits
+
+import time, numpy
 from GtBurst import dataHandling
 from GtBurst import IRFS
 import matplotlib.colors as col

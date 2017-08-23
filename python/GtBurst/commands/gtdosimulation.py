@@ -3,7 +3,12 @@
 import sys
 import os, shutil
 from GtBurst import commandDefiner
-import pyfits, numpy
+try:
+    import astropy.io.fits as pyfits
+except:
+    import pyfits
+
+import numpy
 from GtBurst.commands import gtdocountsmap
 
 ################ Command definition #############################

@@ -3,7 +3,11 @@
 from multiprocessing import Pool
 import os
 import subprocess
-import pyfits
+try:
+    import astropy.io.fits as pyfits
+except:
+    import pyfits
+
 import sys
 import pickle
 import argparse

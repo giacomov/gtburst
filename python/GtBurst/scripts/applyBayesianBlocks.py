@@ -10,7 +10,11 @@ from GtBurst import BayesianBlocks
 try:
   import astropy.io.fits as pyfits
 except:
-  import pyfits
+  try:
+    import astropy.io.fits as pyfits
+except:
+    import pyfits
+
 
 parser                        = argparse.ArgumentParser("Apply the Bayesian Blocks algorithm on the input data")
 

@@ -5,7 +5,11 @@ import numpy as np
 import tempfile
 import os
 import subprocess
-import pyfits
+try:
+    import astropy.io.fits as pyfits
+except:
+    import pyfits
+
 
 from gt_apps import expMap
 

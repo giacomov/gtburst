@@ -8,12 +8,10 @@ import sys
 import os, shutil
 
 try:
-    
-    from astropy.io.fits import pyfits
-
+    import astropy.io.fits as pyfits
 except:
-    
     import pyfits
+
 
 if __name__=="__main__":
     

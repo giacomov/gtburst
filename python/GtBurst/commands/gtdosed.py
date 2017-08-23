@@ -5,7 +5,12 @@ import os
 from GtBurst import commandDefiner
 from GtBurst import LikelihoodComponent
 from GtBurst.GtBurstException import GtBurstException
-import pyfits, numpy,math
+try:
+    import astropy.io.fits as pyfits
+except:
+    import pyfits
+
+import numpy,math
 import scipy.integrate
 import re
 import xml.etree.ElementTree as ET
