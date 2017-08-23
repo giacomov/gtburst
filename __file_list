@@ -1,4 +1,5 @@
 85cea489c28e3cbc40d9ebcc2703d5ea *python/gtburst.py
+c15994a70c281df43a0283e3b121130e *python/pyfits.py
 bf28ba1a47e19d4a8c3ae355a00b613c *python/GtBurst/SubWindow.py
 0b6fa01864e7fd0f65cf23a6d225854a *python/GtBurst/gtapps_mp/gtdiffrsp_mp.py
 702e08ab02019f6ae9ead6816f69f3ea *python/GtBurst/gtapps_mp/gtexpmap_mp.py
@@ -38,7 +39,7 @@ ee7756b69209acff0473751261e6e301 *python/GtBurst/commands/gteditxmlmodel.py
 557ef31a5a2e04e15473bbf66837aaa8 *python/GtBurst/commands/gtllesrcbindef.py
 aa0b472f87836e81f88e0c9d6bc44644 *python/GtBurst/commands/__init__.py
 8e7dfe3e4725e0cd5b3ca7fb889e0945 *python/GtBurst/commands/gtdosimulation.py
-a2627161ee746a6bf7459982caa627c0 *python/GtBurst/version.py
+8d500fdfecf55335a23420da0df06550 *python/GtBurst/version.py
 30a8fa18fc8cde59cd514ac1b81d6a6a *python/GtBurst/getGBMfiles.py
 a16ad95ed1856f1c9b5de0173655336b *python/GtBurst/dataHandling.py
 f163cb15a10d6fc518c40e0405db1f5c *python/GtBurst/IRFS.py
