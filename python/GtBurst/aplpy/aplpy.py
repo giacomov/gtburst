@@ -1518,7 +1518,7 @@ class FITSFigure(Layers, Regions, Deprecated):
                 wanted, enter None or 0.
         '''
 
-        if dpi == None and os.path.splitext(filename)[1].lower() in ['.eps', '.ps', '.pdf']:
+        if dpi  is None and os.path.splitext(filename)[1].lower() in ['.eps', '.ps', '.pdf']:
             width = self._ax1.get_position().width * self._figure.get_figwidth()
             interval = self._ax1.xaxis.get_view_interval()
             nx = interval[1] - interval[0]

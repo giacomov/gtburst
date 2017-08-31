@@ -26,7 +26,7 @@ def selectFile(parent,entry, extension="*",**kwargs):
                                         initialdir=workdir)
     pass
     
-    if(filename!=None and filename!=()):
+    if(filename is not None and filename!=()):
       entry.delete(0,END)
       entry.insert(0,"%s" % filename)
     else:

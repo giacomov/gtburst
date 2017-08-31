@@ -148,8 +148,8 @@ def run(**kwargs):
   
   displ                       = None
     
-  if(figure!=None):     
-    if(lastDisplay!=None):
+  if(figure is not None):     
+    if(lastDisplay is not None):
       lastDisplay.unbind()
     pass
     from GtBurst.InteractiveFt1Display import InteractiveFt1Display

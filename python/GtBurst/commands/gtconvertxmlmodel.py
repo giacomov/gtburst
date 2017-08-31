@@ -94,7 +94,7 @@ def run(**kwargs):
   dec                         = dataHandling._getParamFromXML(xmlmodel,'DEC')
   name                        = dataHandling._getParamFromXML(xmlmodel,'OBJECT')
   
-  if(irf==None):
+  if(irf is None):
     print("\n\nWARNING: could not read IRF from XML file. Be sure you know what you are doing...")
   
   sourceList                  = xmlmodel.replace('.xml','.txt')
@@ -105,7 +105,7 @@ def run(**kwargs):
   tmpxml                      = "__temp__xmlmodel.xml"
   shutil.copy(xmlmodel,tmpxml)
   originalNorm                = dataHandling.getIsotropicTemplateNormalization(xmlmodel)
-  if(originalNorm!=None or originalNorm!=1):
+  if(originalNorm is not None or originalNorm!=1):
     dataHandling.setIsotropicTemplateNormalization(tmpxml,1)
   else:
     #Either the template is not in the XML file (possibly because the user used Transient class),
@@ -138,7 +138,7 @@ def run(**kwargs):
   
   file(xmlsimmodel,'w').writelines(newlines)
   
-  if(irf!=None):
+  if(irf is not None):
     dataHandling._writeParamIntoXML(xmlsimmodel,IRF=irf,OBJECT=name,RA=ra,DEC=dec)
   pass    
   

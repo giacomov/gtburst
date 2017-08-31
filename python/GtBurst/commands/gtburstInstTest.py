@@ -20,12 +20,12 @@ else:
   print("ok")
 
 print("Testing environment variables..."),
-if(os.environ.get('ISOTROPIC_TEMPLATE')==None):
+if(os.environ.get('ISOTROPIC_TEMPLATE') is None):
   print("Error!")
   print("\nYou have to set the env. variable ISOTROPIC_TEMPLATE. Refers to the documentation.")
   sys.exit(-1)
 
-if(os.environ.get('GALACTIC_DIFFUSE_TEMPLATE')==None):
+if(os.environ.get('GALACTIC_DIFFUSE_TEMPLATE') is None):
   print("Error!")
   print("\nYou have to set the env. variable GALACTIC_DIFFUSE_TEMPLATE. Refers to the documentation.")
   sys.exit(-1)

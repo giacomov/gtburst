@@ -88,7 +88,7 @@ def run(**kwargs):
   
   xml                         = xmlModelGUI.xmlModelGUI(xmlmodel,tkwindow)  
       
-  if(irf!=None):
+  if(irf is not None):
     dataHandling._writeParamIntoXML(xmlmodel,IRF=irf,OBJECT=name,RA=ra,DEC=dec)
   pass
   

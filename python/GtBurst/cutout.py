@@ -1,9 +1,7 @@
-try:
-    import astropy.io.fits as pyfits
-except:
-    import pyfits
+# This is not compatible with astropy.wcs and astropy.pyfits
+import pyfits
+import pywcs
 
-from GtBurst.wcs_wrap import pywcs
 import numpy
 from pyLikelihood import SkyDir
 from GtBurst.angularDistance import getAngularDistance
@@ -275,19 +273,19 @@ def cutout(filename, ra_or_l, dec_or_b, coordsys, radius, outfile, clobber=True)
       with pyfits.open(outfile,'update') as outf:
         head                         = outf[0].header
         #Get the 
-        wcs                          = pywcs.WCS(head)
+        newwcs                          = pywcs.WCS(head)
         
         #Find the sky coordinates of the 1,1 pixel
         if(isCube):
           #Data cube
           coord                       = numpy.array([[1],[1],[1]]).T
-          sx,sy,z                     = wcs.wcs_pix2sky(coord,1)[0]
+          sx,sy,z                     = newwcs.wcs_pix2sky(coord,1)[0]
         else:
           #Normal image
           coord                       = numpy.array([[1],[1]]).T
-          sx,sy                       = wcs.wcs_pix2sky(coord,1)[0]
+          sx,sy                       = newwcs.wcs_pix2sky(coord,1)[0]
         pass
-        
+                
         head['CRPIX1']                = 1
         head['CRVAL1']                = sx
       

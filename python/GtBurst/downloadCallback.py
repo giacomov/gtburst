@@ -11,7 +11,7 @@ class Callback(object):
     self.received             = self.fp.tell()
     ratio                     = self.received/self.totalsize
     
-    if(self.m!=None):
+    if(self.m is not None):
       if(ratio > 1):
         self.m.set(1)
       else:

@@ -8,6 +8,8 @@ import os, glob
 import shlex, subprocess, shutil
 import numpy
 
+from GtBurst.dataHandling import create_from_columns
+
 #The RSP2 matrix for the GBM are computed by interpolating a grid of
 #responses containing Montecarlo-generated rsp for different position of
 #the source and different satellite orientations. Thus, the most accurate
@@ -528,7 +530,7 @@ def fixMatrixHDU(matrixHDU):
                                  col.start,col.dim,matrixHDU.data.field(col.name)))
   pass
 
-  newtable                    = BinTableHDU.from_columns(newcols,header=matrixHDU.header)
+  newtable                    = create_from_columns(newcols,header=matrixHDU.header)
   return newtable
 pass
 

@@ -261,7 +261,7 @@ class GUI(object):
                 pass
             try:
                 # If there is no "addrmf" executables in the path, do not use the rsp2 as response, but the rsp
-                if (dataHandling.testIfExecutableExists("addrmf") == None):
+                if (dataHandling.testIfExecutableExists("addrmf")  is None):
                     if (self.addrmfWarning):
                         showinfo("Addrmf missing",
                                  ("The tool addrmf is not available!\n\naddrmf is part of the Heasarc FTOOLS "
@@ -322,7 +322,7 @@ class GUI(object):
         self.bottomtext.config(state=NORMAL)
         self.bottomtext.delete(1.0, END)
         self.bottomtext.insert(1.0, message)
-        if (hint != None):
+        if (hint  is not None):
             self.bottomtext.insert(END, "\n\n")
             self.bottomtext.image_create(END, image=self.lightbulb)
             self.bottomtext.insert(END, hint)
@@ -446,7 +446,7 @@ class GUI(object):
             try:
                 trigger = pyfits.getval(entries['eventfile'].get(), 'OBJECT')
                 # Add 'bn' in front of the name if it begins with a number
-                if (re.search('[0-9]', trigger[0]) != None):
+                if (re.search('[0-9]', trigger[0])  is not None):
                     trigger = 'bn%s' % trigger
             except:
                 trigger = "Unknown"
@@ -471,7 +471,7 @@ class GUI(object):
     def changeTriggerTime(self):
         # No trigger time information at all!
         triggerTime = askfloat("Change trigger time", "Please specify the new trigger time:", parent=self.root)
-        if (triggerTime == '' or triggerTime == 0 or triggerTime == None):
+        if (triggerTime == '' or triggerTime == 0 or triggerTime  is None):
             sys.stderr.write("\nChange of trigger time canceled. Keeping the old value.\n")
             return
         for dataset in self.datasets:
@@ -1164,7 +1164,7 @@ class GUI(object):
                 respfileCol = pyfits.Column(name='RESPFILE', format=frmt,
                                             array=respfileArr)
                 # Make a fake table
-                newtable = BinTableHDU.from_columns(pyfits.ColDefs([backfileCol, respfileCol]))
+                newtable = dataHandling.create_from_columns(pyfits.ColDefs([backfileCol, respfileCol]))
 
                 # Reopen the file and append the columns
                 f = pyfits.open(dataset['srcspectra'])
@@ -1177,7 +1177,7 @@ class GUI(object):
                     pass
                 else:
                     coldef = f['SPECTRUM', 1].columns + newtable.columns
-                    finalTable = BinTableHDU.from_columns(coldef, header=header)
+                    finalTable = dataHandling.create_from_columns(coldef, header=header)
                 pass
                 finalTable.header.set("POISSERR", True)
 
@@ -1605,13 +1605,13 @@ class GUI(object):
     def loadDataSetsFromAdirectory(self, directory=None):
         # Load a dataset
         # Select a file from a browser and change correspondingly the given entry
-        if (directory == None):
+        if (directory  is None):
             directory = fancyFileDialogs.chooseDirectory(self.root,
                                                          title="Please select a directory containing data files",
                                                          initialdir=self.configuration.get('dataRepository'))
         pass
 
-        if (directory == None or directory == '' or directory == ()):
+        if (directory  is None or directory == '' or directory == ()):
             # Cancel button, do nothing
             return
         pass
@@ -1802,7 +1802,7 @@ class GUI(object):
                         title="Please select RSP file for detector %s" % (dataset.detector),
                         initialdir=self.configuration.get('dataRepository'),
                         filetypes=[("Detector responses", "*.rsp*"), ("All files", "*")])
-                    if (userResponse == None or userResponse == ''):
+                    if (userResponse  is None or userResponse == ''):
                         showerror("No rsp provided",
                                   "You did not provide a RSP file, ignoring detector %s" % (dataset.detector),
                                   parent=parent)
@@ -1840,7 +1840,7 @@ class GUI(object):
             triggerTime = askfloat("No trigger time in data",
                                    "No trigger time contained in datasets. You have to manually specify the trigger time:",
                                    parent=self.root)
-            if (triggerTime == '' or triggerTime == 0 or triggerTime == None):
+            if (triggerTime == '' or triggerTime == 0 or triggerTime  is None):
                 self.datasets = []
                 return
             for dataset in datasets:
@@ -1852,7 +1852,7 @@ class GUI(object):
             triggerTime = askfloat("Inconsistent trigger times",
                                    "Inconsistent trigger times between datasets.\n%s\n You have to manually specify the trigger time:" % msg,
                                    parent=self.root)
-            if (triggerTime == '' or triggerTime == 0 or triggerTime == None):
+            if (triggerTime == '' or triggerTime == 0 or triggerTime  is None):
                 self.datasets = []
                 return
             for dataset in datasets:
@@ -1911,7 +1911,7 @@ class GUI(object):
             self.datasets.sort(key=my_sorter)
 
             # Display check buttons
-            if (self.displayDetFrame != None):
+            if (self.displayDetFrame  is not None):
                 self.displayDetFrame.destroy()
             pass
 

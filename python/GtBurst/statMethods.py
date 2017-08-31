@@ -215,7 +215,7 @@ class LogLikelihood(object):
     derivs                    = numpy.zeros(Nfree)
     
     #Set the parameters, if a new set has been provided
-    if(parameters!=None):
+    if(parameters is not None):
       self.model.setParams(parameters)
     pass
     

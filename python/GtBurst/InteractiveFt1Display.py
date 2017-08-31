@@ -136,7 +136,7 @@ class InteractiveFt1Display(object):
     
     #Try to plot a cross at the source position
     
-    if(self.obj_ra!=None):
+    if(self.obj_ra is not None):
       self.image.show_markers([float(self.obj_ra)], [float(self.obj_dec)], edgecolor='cyan', facecolor='cyan',marker='x', s=120, alpha=0.5,linewidth=2)
     
     self.figure.canvas.draw()
@@ -208,7 +208,7 @@ class InteractiveFt1Display(object):
     self.figure.canvas.draw()
     
     #Destroy the callback with previous data, and create a new one with the new data
-    if(self.pickerID!=None):
+    if(self.pickerID is not None):
       self.figure.canvas.mpl_disconnect(self.pickerID)
     pass
     self.pickerID             = self.figure.canvas.mpl_connect('pick_event',
@@ -232,7 +232,7 @@ class InteractiveFt1Display(object):
   pass
   
   def on_click(self,event):
-    if(event.inaxes==None):
+    if(event.inaxes is None):
       #Click outside any plot, do nothing
       return
     pass
@@ -240,10 +240,10 @@ class InteractiveFt1Display(object):
     if(event.inaxes.get_label()!='event display'):
       #This is a click on the sky image, get the corresponding ra,dec
       ax                      = self.image._ax1
-      if(ax.get_navigate_mode()==None):
+      if(ax.get_navigate_mode() is None):
         ra,dec                = ax._wcs.wcs_pix2sky(event.xdata,event.ydata,1)
-        self.user_ra          = ra[0]
-        self.user_dec         = dec[0]
+        self.user_ra          = numpy.array(ra, ndmin=1)[0]
+        self.user_dec         = numpy.array(dec, ndmin=1)[0]
         self.figure.canvas.stop_event_loop()
       else:
         #We are in zoom mode, do nothing
@@ -312,7 +312,7 @@ class InteractiveFt1Display(object):
     
     self.image.show_circles([ras],[decs],[radius_length],
                            facecolor='white',layer="circle",alpha=0.8)
-    if(self.evtext!=None):
+    if(self.evtext is not None):
       try:
         self.evtext.remove()
       except:

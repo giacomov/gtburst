@@ -10,8 +10,8 @@ try:
     
     # Monkeypatch the WCS object so that it behaves like the
     # pywcs object
-    pywcs.WCS.wcs_pix2sky = pywcs.WCS.all_pix2world
-    pywcs.WCS.wcs_sky2pix = pywcs.WCS.all_world2pix
+    pywcs.WCS.wcs_pix2sky = pywcs.WCS.wcs_pix2world
+    pywcs.WCS.wcs_sky2pix = pywcs.WCS.wcs_world2pix
     
 except ImportError:
     

@@ -106,7 +106,7 @@ if __name__=="__main__":
   except:
     raise
   
-  if(dataset==None):
+  if(dataset is None):
     #Download data
     print("\nData for trigger %s are not available. Let's download them!" %(args.triggername))
     cmdLine                   = "gtdownloadLATdata.py triggername=%s timebefore=%s timeafter=%s datarepository=%s" %(args.triggername,
@@ -124,7 +124,7 @@ if __name__=="__main__":
   pass
   
   #Now get R.A. and Dec. if not specified
-  if(args.ra==None or args.dec==None):
+  if(args.ra is None or args.dec is None):
     header                      = pyfits.getheader(dataset['eventfile'],'EVENTS')
     ra,dec                      = (header['RA_OBJ'],header['DEC_OBJ'])
     args.ra                     = ra

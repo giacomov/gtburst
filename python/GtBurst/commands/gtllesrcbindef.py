@@ -88,7 +88,7 @@ def run(**kwargs):
   
   message                     = Message(verbose)
   
-  if(eventfile!=None and rspfile!=None and dt!=None
+  if(eventfile is not None and rspfile is not None and dt is not None
      and eventfile!='None' and rspfile!='None' and dt!='None'):
     #Run gtllebin before to rebin the TTE/LLE file and generate a custom CSPEC file
     gtllebinpar               = dict(kwargs)

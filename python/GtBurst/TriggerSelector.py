@@ -82,10 +82,10 @@ class TriggerSelector(object):
     def __init__(self,parent=None,**kwargs):
         self.parent           = parent
         self.downloadList(**kwargs)
-        if(self.data==None):
+        if(self.data is None):
           #Could not download the trigger list!
           return
-        if(parent!=None):
+        if(parent is not None):
           #Graphic mode
           self.w                = SubWindow(self.parent,
                                           transient=True,title="Select source",
@@ -114,7 +114,7 @@ class TriggerSelector(object):
           #'|bn080714425 |2008-07-14 10:12:01.838|GRB         |',
           #'|bn080714745 |2008-07-14 17:52:54.023|GRB         |',
           url = "http://heasarc.gsfc.nasa.gov/cgi-bin/W3Browse/w3query.pl?tablehead=name%3dBATCHRETRIEVALCATALOG%5f2%2e0+fermigtrig&Action=Query&Coordinates=%27Equatorial%3a+R%2eA%2e+Dec%27&Equinox=2000&Radius=60&NR=&GIFsize=0&Fields=&varon=trigger%5fname&varon=trigger%5ftime&varon=trigger%5ftype&varon=ra&varon=dec&varon=error_radius&varon=localization_source&sortvar=trigger%5fname&ResultMax=1000000&displaymode=BatchDisplay'"
-          if(self.parent!=None):
+          if(self.parent is not None):
             window                = Toplevel(self.parent)
             window.transient(self.parent)        
             frame                 = Frame(window)
@@ -135,7 +135,7 @@ class TriggerSelector(object):
             self.dec                = None
             self.data               = None
             
-            if(self.parent!=None):
+            if(self.parent is not None):
               window.destroy()
               showerror("No connection","You do not seem to be connected to the internet, or problem with the HEASARC server. Cannot download list of triggers, you have to specify your trigger manually",
                          parent=self.parent)
@@ -162,7 +162,7 @@ class TriggerSelector(object):
           self.data[i][4]     = " %5.3f" % convDMS(dec)
         #Remove all spaces
         self.data             = map(lambda x:map(lambda y:y.replace(" ",''),x),self.data)
-        if(self.parent!=None):
+        if(self.parent is not None):
           window.destroy()
     pass
     
@@ -197,7 +197,7 @@ class TriggerSelector(object):
     pass
     
     def done(self,item=None):
-      if(item==None):
+      if(item is None):
         try:
           item                    = self.tree.selection()[0]
         except:
@@ -206,7 +206,7 @@ class TriggerSelector(object):
         pass
       pass
       
-      if(self.parent!=None):
+      if(self.parent is not None):
         par                     = self.tree.item(item,"values")
       else:
         #No GUI mode
@@ -219,7 +219,7 @@ class TriggerSelector(object):
       self.ra                 = par[3]
       self.dec                = par[4]
       
-      if(self.parent!=None):
+      if(self.parent is not None):
         self.root.destroy()
         self.parent.grab_set()
     pass
@@ -237,7 +237,7 @@ class TriggerSelector(object):
     pass
     
     def _setup_tree(self,curfilter='All'):
-        if(self.tree!=None):
+        if(self.tree is not None):
           self.tree.destroy()
         # XXX Sounds like a good support class would be one for constructing
         #     a treeview with scrollbars.

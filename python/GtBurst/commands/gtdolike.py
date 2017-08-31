@@ -150,7 +150,7 @@ def run(**kwargs):
     grb_TS                      = -1
   pass
   
-  if(irf==None):
+  if(irf is None):
     print("\n\nWARNING: could not read IRF from XML file. Be sure you know what you are doing...")
   else:
     dataHandling._writeParamIntoXML(outfilelike,IRF=irf,OBJECT=name,RA=ra,DEC=dec)
@@ -189,7 +189,7 @@ def run(**kwargs):
     pass
   pass
   
-  if(figure!=None and skymap!=None and showmodelimage=='yes'):
+  if(figure is not None and skymap is not None and showmodelimage=='yes'):
     
     #Now produce the binned exposure map (needed in order to display the fitted model as an image)
     modelmapfile              = LATdata.makeModelSkyMap(outfilelike) 
@@ -275,7 +275,7 @@ def run(**kwargs):
     figure.savefig("likelihood_results.png")
   pass
   
-  if(figure!=None):
+  if(figure is not None):
         
     #Assume we have an X server running
     #Now display the results

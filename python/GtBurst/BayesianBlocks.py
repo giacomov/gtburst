@@ -72,7 +72,7 @@ def bayesian_blocks(tt, ttstart, ttstop, p0, bkgIntegralDistr=None,myLikelihood=
     
     assert tt.ndim == 1
         
-    if(bkgIntegralDistr!=None):
+    if(bkgIntegralDistr is not None):
       # Transforming the inhomogeneous Poisson process into an homogeneous one with rate 1,
       #by changing the time axis according to the background rate
       logger.debug("Transforming the inhomogeneous Poisson process to a homogeneous one with rate 1...")
@@ -234,7 +234,7 @@ def bayesian_blocks(tt, ttstart, ttstop, p0, bkgIntegralDistr=None,myLikelihood=
     edg                            = edges[change_points]    
     
     #Transform the found edges back into the original time system
-    if(bkgIntegralDistr!=None):
+    if(bkgIntegralDistr is not None):
       finalEdges                     = map(lambda x:lookupTable[x],edg)
     else:
       finalEdges                   = edg

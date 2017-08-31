@@ -38,7 +38,7 @@ class FGLSelector(TriggerSelector):
         
         self.readFGL(xmlfile, **kwargs)
         
-        if(parent!=None):
+        if(parent is not None):
           #Graphic mode
           self.w                = SubWindow(self.parent,
                                           transient=True,title="Select source",

@@ -60,7 +60,7 @@ def _fromPythonToTcl(optdict):
 
 class FileDialog(object):
   def __init__(self,master=None,**kwargs):
-    if(master==None):
+    if(master is None):
       self.root               = Tkinter.Tk()
     else:
       self.root               = master
@@ -77,7 +77,7 @@ pass
 
 class DirectoryDialog(object):
   def __init__(self,master=None,**kwargs):
-    if(master==None):
+    if(master is None):
       self.root               = Tkinter.Tk()
     else:
       self.root               = master

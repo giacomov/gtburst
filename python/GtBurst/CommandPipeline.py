@@ -175,7 +175,7 @@ class CommandPipeline(object):
         #Went after the last step... close everything
         self.cleanUp()
         
-        if(self.finalProducts!=None):
+        if(self.finalProducts is not None):
           #Print a message with the produced files
           message             = "Files produced:\n"
           for dataset in self.datasets:
@@ -216,7 +216,7 @@ class CommandPipeline(object):
       
       #If there is an active eventDisplay, clear its bindings (otherwise it will slow down everything)
       for i,ds in enumerate(self.datasets):
-        if('eventDisplay' in ds.keys() and self.datasets[i]['eventDisplay']!=None):
+        if('eventDisplay' in ds.keys() and self.datasets[i]['eventDisplay'] is not None):
             #Explicity free the bindinds in the eventDisplay (otherwise they will still be called)
             self.datasets[i]['eventDisplay'].unbind()
         pass
@@ -267,7 +267,7 @@ class CommandPipeline(object):
             
       self.figureFrame.focus_set()
       command               = self.commands[self.currentStep]
-      if(self.console==None):  
+      if(self.console is None):  
         self.console        = Console(self.windows[self.currentStep].window)
       pass
       
@@ -331,7 +331,7 @@ class CommandPipeline(object):
         success               = False
         try:
           outtuple = command.run(**thisParameters)
-          if(outtuple==None):
+          if(outtuple is None):
             success         = False
           else:
             success         = True
@@ -367,7 +367,7 @@ class CommandPipeline(object):
         pass
                         
         self.enableButtons(success)
-        if(outtuple==None):
+        if(outtuple is None):
           #abort
           return
         #Register the output

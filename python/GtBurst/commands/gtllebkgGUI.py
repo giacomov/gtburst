@@ -103,7 +103,7 @@ def run(**kwargs):
     key2, outfile2,cspecBackground = gtllebkg.run(**kwargs)
     message("\n%s done!" %(thisCommand.name))
     
-    if(figure!=None):
+    if(figure is not None):
       #We are in the GUI
       #Show a light curve with the residuals for the background
       cspecBackground.makeLightCurveWithResiduals(**kwargs)

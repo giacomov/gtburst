@@ -114,7 +114,7 @@ def run(**kwargs):
   sourceName                  = dataHandling._getParamFromXML(xmlmodel,'OBJECT')
   
   #Verify that TS map, if provided, is compatible with the position in the XML
-  if(tsexpomap!=None and tsexpomap!=''):
+  if(tsexpomap is not None and tsexpomap!=''):
     if(os.path.exists(tsexpomap)):
       header                  = pyfits.getheader(tsexpomap)
       ra,dec                  = (float(header.get('CRVAL1')),float(header.get('CRVAL2')))
@@ -137,7 +137,7 @@ def run(**kwargs):
   print("(R.A., Dec.)              = (%6.3f, %6.3f)\n" %(ra,dec))
   print("Distance from ROI center  = %6.3f\n\n" %(getAngularDistance(origra,origdec,ra,dec)))
 
-  if(figure!=None):
+  if(figure is not None):
     from GtBurst import aplpy   
     #Display the TS map    
     figure.clear()

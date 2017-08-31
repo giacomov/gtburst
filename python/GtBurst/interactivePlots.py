@@ -92,7 +92,7 @@ class InteractiveFigure(object):
     self.x                    = x
     self.y                    = y
     
-    if(self.figure==None):  
+    if(self.figure is None):  
       self.figure               = plt.figure()
       self.figure.canvas.mpl_connect('close_event', self.closing)
       self.figureIsMine         = True
@@ -212,7 +212,7 @@ class InteractiveFigure(object):
     if(len(self.figure.axes)>0):
       ax                        = self.figure.axes[0]
       navmode                   = ax.get_navigate_mode()
-      if(navmode==None):
+      if(navmode is None):
         return True
       else:
         return False
@@ -224,7 +224,7 @@ class InteractiveFigure(object):
     #I want to draw the line only when I am in normal mode
     #(no zoom/pan)
     
-    if(event.xdata==None or event.ydata==None or not self.isNormalMode(event)):
+    if(event.xdata is None or event.ydata is None or not self.isNormalMode(event)):
       #Mouse outside figure or mode not normal
       self.delLines(self.transitoryLines)
       return
@@ -373,7 +373,7 @@ class InteractiveFigure(object):
     if not self.isNormalMode(event):
       #Ignore event if we are not in normal mode
       return
-    if(event.xdata==None or event.ydata==None):
+    if(event.xdata is None or event.ydata is None):
       self.delLines(self.transitoryLines)
       self.curXdata           = 'safetynet'
       self.curYdata           = 'safetynet'
@@ -391,12 +391,12 @@ class InteractiveFigure(object):
     
     #Tolerance
     tol                 = 2.0
-    if(event.xdata!=None and self.curXdata!=None):
+    if(event.xdata is not None and self.curXdata is not None):
       deltax            = abs(event.xdata-self.curXdata)
     else:
       deltax            = 1e9
     pass
-    if(event.ydata!=None and self.curYdata!=None):
+    if(event.ydata is not None and self.curYdata is not None):
       deltay            = abs(event.ydata-self.curYdata)
     else:
       deltay            = 1e9

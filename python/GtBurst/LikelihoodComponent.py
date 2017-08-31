@@ -35,7 +35,7 @@ def findGalacticTemplate(irfname, ra, dec, rad, cutout_name=None):
     irf = IRFS.IRFS[irfname]
         
     templ = findTemplate(irf.galacticTemplate)
-    if (templ == None):
+    if (templ  is None):
         raise GtBurstException.GtBurstException(61,
                                                 "You don't have a Galactic template for IRF %s. Cannot continue." % (
                                                 irfname))
@@ -69,7 +69,7 @@ def findIsotropicTemplate(irfname):
         templ = findTemplate(irf.isotropicTemplate)
     pass
 
-    if (templ == None):
+    if (templ  is None):
         raise GtBurstException.GtBurstException(61,
                                                 "You don't have an Isotropic template for IRF %s. Cannot continue." % (
                                                 irfname))
@@ -86,22 +86,22 @@ def findTemplate(options):
     foundTemplate = None
     envvar = os.environ.get("FERMI_DIR")
     publicTools = True
-    if (envvar == None):
+    if (envvar  is None):
         # This is for versions of ST internal to the collaboration
         envvar = os.environ.get("GLAST_EXT")
         publicTools = False
-        if (envvar == None):
+        if (envvar  is None):
             raise RuntimeError(
                 "Fermi Science tools are not properly configured. No FERMI_DIR nor GLAST_EXT variables are set. Cannot continue.")
         pass
     pass
 
-    if (os.environ.get('GTBURST_TEMPLATE_PATH') == None):
+    if (os.environ.get('GTBURST_TEMPLATE_PATH')  is None):
         # This is normally the case
         if (publicTools):
             path = os.path.abspath(os.path.expanduser(os.path.join(envvar, 'refdata', 'fermi', 'galdiffuse')))
         else:
-            if (os.environ.get('DIFFUSE_VER') == None):
+            if (os.environ.get('DIFFUSE_VER')  is None):
                 ver = 'v2r0'
             else:
                 ver = os.environ.get('DIFFUSE_VER')

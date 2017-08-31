@@ -93,7 +93,7 @@ def sortby(tree, col, descending):
 
 class xmlModelGUI(object):
     def __init__(self,xmlModelFile,parent=None):
-        if(parent==None):
+        if(parent is None):
           self.root = Tk()
           self.root.maxsize(1024,768)
           self.root.wm_title("Likelihood model %s" %(os.path.basename(xmlModelFile)))
@@ -176,7 +176,7 @@ class xmlModelGUI(object):
     
     def _setup_tree(self):
                 
-        if(self.tree!=None):
+        if(self.tree is not None):
           self.tree.destroy()
         # XXX Sounds like a good support class would be one for constructing
         #     a treeview with scrollbars.

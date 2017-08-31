@@ -125,7 +125,7 @@ def run(**kwargs):
   dec                         = dataHandling._getParamFromXML(xmlmodel,'DEC')
   sourceName                  = dataHandling._getParamFromXML(xmlmodel,'OBJECT')
   
-  if(irf==None):
+  if(irf is None):
     print("\n\nWARNING: could not read IRF from XML file. Be sure you know what you are doing...")
   else:
     dataHandling._writeParamIntoXML(outfilelike,IRF=irf,OBJECT=sourceName,RA=ra,DEC=dec)
@@ -182,7 +182,7 @@ def run(**kwargs):
   totalInputCounts            = len(energies)
   f.close()
   
-  if(energybins!=None):
+  if(energybins is not None):
     energyBoundaries            = map(lambda x:float(x),energybins.split(','))
   else:
     energyBoundaries          = LikelihoodComponent.optimizeBins(LATdata.like1,energies,sourceName,minTs=tsmin,minEvt=3)
@@ -259,9 +259,9 @@ def run(**kwargs):
   pass
   fw.close()
   
-  if(figure!=None):  
+  if(figure is not None):  
     #Display the SED
-    if(os.environ.get('DISPLAY')==None):
+    if(os.environ.get('DISPLAY') is None):
       os.environ.set('DISPLAY','/dev/null')
       import matplotlib
       matplotlib.use('Agg')
