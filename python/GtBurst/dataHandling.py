@@ -9,6 +9,7 @@ import re
 import shutil
 import subprocess
 import time
+import numpy
 import xml.etree.ElementTree as ET
 from contextlib import contextmanager
 
@@ -3819,7 +3820,7 @@ def findMaximumTSmap(tsmap, tsexpomap):
     idxs = numpy.unravel_index(image.argmax(), image.shape)
     # R.A., Dec of the maximum (the +1 is due to the FORTRAN Vs C convention
     ra, dec = wcs.wcs_pix2sky(idxs[1] + 1, idxs[0] + 1, 1)
-    ra, dec = ra[0], dec[0]
+    ra, dec = numpy.array(ra, ndmin=1)[0], numpy.array(dec, ndmin=1)[0]
 
     # Now check that the value in the exposure map for this ra,dec is not too small,
     # nor that this Ra,Dec is at the margin of an excluded zones
