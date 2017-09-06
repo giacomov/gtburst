@@ -173,7 +173,7 @@ def IsotropicTemplateFunc(irf):
 
     spectrum = '''
    <spectrum file="%s" type="FileFunction">
-      <parameter free="1" max="1.5" min="0.5" name="Normalization" scale="1" value="1" />
+      <parameter free="1" max="15.0" min="0.1" name="Normalization" scale="1" value="1" />
    </spectrum>
     ''' % (findIsotropicTemplate(irf))
 
