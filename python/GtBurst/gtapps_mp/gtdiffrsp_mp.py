@@ -2,10 +2,8 @@
 
 from multiprocessing import Pool
 import numpy as np
-try:
-    import astropy.io.fits as pyfits
-except:
-    import pyfits
+
+from GtBurst.my_fits_io import pyfits
 
 import tempfile
 import os

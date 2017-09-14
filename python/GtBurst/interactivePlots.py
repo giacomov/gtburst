@@ -1,9 +1,6 @@
 import math
 import numpy as np
-try:
-    import astropy.io.fits as pyfits
-except:
-    import pyfits
+from GtBurst.my_fits_io import pyfits
 
 import matplotlib.pyplot as plt
 plt.ion()

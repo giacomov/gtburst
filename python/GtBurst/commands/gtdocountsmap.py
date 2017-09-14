@@ -5,10 +5,8 @@ import os
 from GtBurst import commandDefiner
 from GtBurst import IRFS
 from GtBurst.GtBurstException import GtBurstException
-try:
-    import astropy.io.fits as pyfits
-except:
-    import pyfits
+
+from GtBurst.my_fits_io import pyfits
 
 import numpy
 

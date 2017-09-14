@@ -3,10 +3,8 @@
 from multiprocessing import Pool
 import os
 import subprocess
-try:
-    import astropy.io.fits as pyfits
-except:
-    import pyfits
+
+from GtBurst.my_fits_io import pyfits
 
 import sys
 import pickle

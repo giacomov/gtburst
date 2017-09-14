@@ -3,10 +3,7 @@
 import sys
 import os, shutil
 from GtBurst import commandDefiner
-try:
-    import astropy.io.fits as pyfits
-except:
-    import pyfits
+from GtBurst.my_fits_io import pyfits
 
 import numpy
 from GtBurst.commands import gtdocountsmap

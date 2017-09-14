@@ -16,10 +16,7 @@ import mpl_toolkits.axes_grid.parasite_axes as mpltk
 
 try:
 
-    try:
-        import astropy.io.fits as pyfits
-    except ImportError:
-        import pyfits
+    from GtBurst.my_fits_io import pyfits
 
 except ImportError:
     raise Exception("pyfits is required for APLpy")

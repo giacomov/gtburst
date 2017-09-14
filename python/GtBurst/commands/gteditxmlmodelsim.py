@@ -2,10 +2,7 @@
 
 import sys
 import os
-try:
-    import astropy.io.fits as pyfits
-except:
-    import pyfits
+from GtBurst.my_fits_io import pyfits
 
 import numpy
 from GtBurst import commandDefiner

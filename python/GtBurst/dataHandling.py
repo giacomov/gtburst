@@ -18,10 +18,7 @@ import UnbinnedAnalysis
 from GtBurst.wcs_wrap import pywcs
 import scipy.optimize
 
-try:
-    import astropy.io.fits as pyfits
-except:
-    import pyfits
+from GtBurst.my_fits_io import pyfits
 
 
 from GtBurst import IRFS

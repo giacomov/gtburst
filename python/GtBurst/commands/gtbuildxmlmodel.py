@@ -3,10 +3,7 @@
 from GtBurst import dataHandling
 from GtBurst import bkge
 import sys, copy
-try:
-    import astropy.io.fits as pyfits
-except:
-    import pyfits
+from GtBurst.my_fits_io import pyfits
 
 import os, numpy
 from GtBurst import commandDefiner

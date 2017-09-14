@@ -5,10 +5,7 @@ mpl.use('Agg')
 from GtBurst import aplpy
 import matplotlib.pyplot as plt
 import sys
-try:
-    import astropy.io.fits as pyfits
-except:
-    import pyfits
+from GtBurst.my_fits_io import pyfits
 
     
 def fitsToPNG(fitsfile,pngfile,vmin=None,vmax=None,**kwargs):

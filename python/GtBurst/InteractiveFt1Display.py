@@ -1,9 +1,6 @@
 from GtBurst import aplpy
 import matplotlib.pyplot as plt
-try:
-    import astropy.io.fits as pyfits
-except:
-    import pyfits
+from GtBurst.my_fits_io import pyfits
 
 import time, numpy
 from GtBurst import dataHandling
