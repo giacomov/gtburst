@@ -4,7 +4,12 @@
 # one
 
 try:
+
+    import pyfits
+    import pywcs   
     
+except ImportError:
+
     import astropy.io.fits as pyfits
     import astropy.wcs as pywcs
     
@@ -12,8 +17,4 @@ try:
     # pywcs object
     pywcs.WCS.wcs_pix2sky = pywcs.WCS.wcs_pix2world
     pywcs.WCS.wcs_sky2pix = pywcs.WCS.wcs_world2pix
-    
-except ImportError:
-    
-    import pyfits
-    import pywcs
+
