@@ -670,15 +670,21 @@ class LikelihoodResultsPrinter(object):
                     # Upper limit for point sources not in the 2FGL (i.e., the GRB)
                     # Fixing the photon index to -2
                     import UpperLimits
-
+                    
+                    emin_erg = self.emin * MeVtoErg
+                    emax_erg = self.emax * MeVtoErg
+                    
                     if (phIndexForUL != -2):
+                    
                         index = phIndexForUL
                         conv = (1. + index) / (2.0 + index) * (
-                        pow(self.emax, index + 2) - pow(self.emin, index + 2)) / (
-                               pow(self.emax, index + 1) - pow(self.emin, index + 1))
+                        pow(emax_erg, index + 2) - pow(emin_erg, index + 2)) / (
+                               pow(emax_erg, index + 1) - pow(emin_erg, index + 1))
                     else:
+                    
                         index = -2.0
-                        conv = (self.emin) * (self.emax) / (self.emax - self.emin) * numpy.log(self.emax / self.emin)
+                        conv = (emin_erg) * (emax_erg) / (emax_erg - emin_erg) * numpy.log(emax_erg / emin_erg)
+                    
                     self.likelihoodObj[sourceName].src.spectrum().parameter('Index').setValue(index)
                     self.likelihoodObj[sourceName].src.spectrum().parameter('Index').setFree(0)
 
@@ -689,7 +695,7 @@ class LikelihoodResultsPrinter(object):
                     ulc = UpperLimits.UpperLimits(self.likelihoodObj)
                     ul, integr = ulc[sourceName].bayesianUL(emin=self.emin, emax=self.emax, cl=0.95)
                     ule = ul * conv
-                    flux = "< %8.3g" % (ule * MeVtoErg)
+                    flux = "< %8.3g" % (ule)
                     fluxError = 'n.a.'
                     phflux = "< %8.3g" % (ul)
                     phfluxError = 'n.a.'
