@@ -70,7 +70,29 @@ def update(debug=False):
     raise GtBurstException(1,"Download was redirected. This happens usually when you are behind a proxy." +
                              " If you are behind a proxy, make sure to log in and " +
                              "that executables from the command line can reach the internet directly.")
-   
+  
+  # First check if we need to update the updater script itself
+  
+  self_path = os.path.abspath(__file__)
+  updater_line = filter(lambda x:x.find("GtBurst/updater.py") >= 0, files)[0]
+  
+  remote_self_md5 = updater_line.split()[0]
+  local_self_md5 = md5.md5(open(self_path, 'rb').read()).hexdigest()
+  
+  if remote_self_md5 != local_self_md5:
+      
+      # Need to update the updater
+      downloadFile(updater_line.split()[-1].replace('*',''), self_path)
+      
+      print("Bootstrapping new updater...")
+      
+      # Execute the new copy of myself :-)
+      os.system("python %s" % self_path)
+      
+      print("done")
+      
+      return 999
+  
   #Get the path of the gtburst installation
   path                      = GtBurst.__file__
   installationPath          = os.path.join(os.path.sep.join(path.split(os.path.sep)[0:-3]))
@@ -143,3 +165,6 @@ def downloadFile(remotepathname,localpathname):
     raise GtBurstException(1,"Problems with the download. Check your connection, and that you can reach %s, then retry" %(remoteUrl))
   pass
   
+if __name__ == "__main__":
+    
+    update()
