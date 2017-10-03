@@ -2,6 +2,7 @@ import GtBurst
 import os
 
 def getDataPath():
+  
   path                 = GtBurst.__file__
   installationPath     = os.path.join(os.path.sep.join(path.split(os.path.sep)[0:-3]))
   
@@ -9,18 +10,25 @@ def getDataPath():
   dataPath             = os.path.join(installationPath,'data')
   
   if(not os.path.exists(os.path.join(dataPath,'glast_logo.png'))):
+  
     #In the SCONS version of Science Tools, data are saved in data/pyBurstAnalysisGUI/
     dataPath           = os.path.join(installationPath,'data','pyBurstAnalysisGUI')
+  
     if(not os.path.exists(os.path.join(dataPath,'glast_logo.png'))):
+  
       #In the public version of Fermi ST, data are in refdata/fermi/pyBurstAnalysisGUI
       installationPath = os.path.join(os.path.sep.join(path.split(os.path.sep)[0:-4]))
       dataPath         = os.path.join(installationPath,'refdata','fermi','pyBurstAnalysisGUI')
-    pass
-  pass
-  
+      
+      if not os.path.exists(os.path.join(dataPath, 'glast_logo.png')):
+          
+          # In the conda version, data are under $INST_DIR/data/pyBurstAnalysisGUI
+          dataPath         = os.path.join(os.environ.get("INST_DIR"), 'data', 'pyBurstAnalysisGUI')
+      
   #Final check
   if(not os.path.exists(os.path.join(dataPath,'glast_logo.png'))):
+
     raise RuntimeError("Fatal error: could not locate the data subdirectory.")
-  pass
+
   
   return dataPath
