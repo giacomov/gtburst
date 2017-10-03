@@ -40,7 +40,7 @@ bad741125b99eac68c867864b43b1abb *python/GtBurst/commands/gtllebkgGUI.py
 e8b7102dc2ff59aa5d8b65cccf257b39 *python/GtBurst/commands/gtllesrcbindef.py
 aa0b472f87836e81f88e0c9d6bc44644 *python/GtBurst/commands/__init__.py
 3576f01d94460704cac9f5acfd4ffdfe *python/GtBurst/commands/gtdosimulation.py
-bd62552ef556fb0fcb412a660ab98e3c *python/GtBurst/version.py
+bc6f725fb034fc82c83c8679d59d2ce4 *python/GtBurst/version.py
 30a8fa18fc8cde59cd514ac1b81d6a6a *python/GtBurst/getGBMfiles.py
 a5485ab6081caccd2149d4a4e78042f5 *python/GtBurst/dataHandling.py
 f163cb15a10d6fc518c40e0405db1f5c *python/GtBurst/IRFS.py
@@ -52,7 +52,7 @@ ed19266d4ff329f52b074005aac7e930 *python/GtBurst/cutout.py
 57550d7ff204c7dbd5570f70e2cc37bd *python/GtBurst/RSPweight.py
 93714cdc9783fc7c1448bbc8272f5cee *python/GtBurst/fancyFileDialogs.py
 b2c8b18c137bc6f50e931d590c87d25b *python/GtBurst/xmlModelGUI.py
-55cd3bedf6104bfb7f53c7e8d8a1e3be *python/GtBurst/getDataPath.py
+58cd5035c25723eb04adc7f702ae96e4 *python/GtBurst/getDataPath.py
 0daac4d4dc5a2f7d5c31a17579a1354a *python/GtBurst/sunpos.py
 6fecf1f0bf385bf28633c2968ee433fa *python/GtBurst/Task.py
 0ff802d083ca7bcb0779bffe4cff6a14 *python/GtBurst/GtBurstException.py
