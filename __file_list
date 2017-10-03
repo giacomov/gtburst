@@ -8,7 +8,7 @@ aa0b472f87836e81f88e0c9d6bc44644 *python/GtBurst/gtapps_mp/__init__.py
 83ca0b6a850a4e5297d0b8ab9336d918 *python/GtBurst/fast_ts_map.py
 cc8eeb2e4194fcffc7fca1e3109523b8 *python/GtBurst/downloadTransientData.py
 9df41bb1d842f9aa1c43a99db5bc9550 *python/GtBurst/plotTimeResolvedLike.py
-46cc883b64e84310747d4af39cf4aac5 *python/GtBurst/updater.py
+f5d8fa8e9b0b4ac74ef726a4c96311d1 *python/GtBurst/updater.py
 85549e8d98a778475a74603f2913155d *python/GtBurst/AutoHideScrollbar.py
 d4c645e3460df35e065050d1fe00f6a5 *python/GtBurst/HyperlinkManager.py
 6bafb02f774dcb7e5e37f7d64f17ff87 *python/GtBurst/wcs_wrap.py
@@ -40,13 +40,13 @@ bad741125b99eac68c867864b43b1abb *python/GtBurst/commands/gtllebkgGUI.py
 e8b7102dc2ff59aa5d8b65cccf257b39 *python/GtBurst/commands/gtllesrcbindef.py
 aa0b472f87836e81f88e0c9d6bc44644 *python/GtBurst/commands/__init__.py
 3576f01d94460704cac9f5acfd4ffdfe *python/GtBurst/commands/gtdosimulation.py
-b6c4467b6b4821b0cf2aa1290f218aaf *python/GtBurst/version.py
+bd62552ef556fb0fcb412a660ab98e3c *python/GtBurst/version.py
 30a8fa18fc8cde59cd514ac1b81d6a6a *python/GtBurst/getGBMfiles.py
 a5485ab6081caccd2149d4a4e78042f5 *python/GtBurst/dataHandling.py
 f163cb15a10d6fc518c40e0405db1f5c *python/GtBurst/IRFS.py
 c2411f81a7e6014f31988b8a9e5018ac *python/GtBurst/my_fits_io.py
 9dfe6af4eaa036b61f4f41e56baade1c *python/GtBurst/dataCollector.py
-8f596c726fb6a12add4d037efa81f2fe *python/GtBurst/cutout.py
+ed19266d4ff329f52b074005aac7e930 *python/GtBurst/cutout.py
 05d2b9a7432675ceea9509ef556c174b *python/GtBurst/interactivePlots.py
 95df53bc5ef48567d19d313971d1d5c9 *python/GtBurst/Treeview.py
 57550d7ff204c7dbd5570f70e2cc37bd *python/GtBurst/RSPweight.py
