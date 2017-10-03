@@ -26,9 +26,9 @@ else:
     
     data_path = os.path.abspath(os.path.join(python_path, "..", "data"))
 
-print("Probed:")
-print("python path: %s" % python_path)
-print("data path: %s" % data_path)
+#print("Probed:")
+#print("python path: %s" % python_path)
+#print("data path: %s" % data_path)
 
 
 def update(debug=False):

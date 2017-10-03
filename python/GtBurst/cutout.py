@@ -1,6 +1,23 @@
+import shutil
+import os
+
 # This is not compatible with astropy.wcs and astropy.pyfits
-import pyfits
-import pywcs
+try:
+
+    import pyfits
+    import pywcs
+
+except ImportError:
+    
+    # A dummy version that doesn't do anything. The cutout is not supported
+    # if pyfits and pywcs are not installed
+    def cutout(filename, ra_or_l, dec_or_b, coordsys, radius, outfile, clobber=True):
+        
+        if os.path.exists(outfile):
+            
+            os.remove(outfile)
+        
+        shutil.copy(filename, outfile)
 
 import numpy
 from pyLikelihood import SkyDir
