@@ -46,8 +46,8 @@ This will turn in a big speed improvement in the likelihood
 analysis.\n
 "complete" = include all FGL sources in or around ROI''',
                                            commandDefiner.OPTIONAL,
-                                         'fast',
-                                         possiblevalues=['fast','complete'])
+                                         'complete',
+                                         possiblevalues=['complete','fast'])
 
 
 thisCommand.addParameter("ft2file","Spacecraft file (FT2)",commandDefiner.OPTIONAL,partype=commandDefiner.DATASETFILE,extension="fits")

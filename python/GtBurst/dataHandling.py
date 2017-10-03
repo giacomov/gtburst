@@ -2010,6 +2010,7 @@ class LATData(LLEData):
         ltcube = None
         emin = None
         emax = None
+        clul = 0.95
 
         for k, v in kwargs.iteritems():
             if (k == 'expomap'):
@@ -2020,6 +2021,8 @@ class LATData(LLEData):
                 emin = float(v)
             elif (k == 'emax' and v is not None):
                 emax = float(v)
+            elif(k == 'clul' and v is not None):
+                clul = float(v)
         pass
         self.getCuts()
         if (ltcube is None or ltcube == ''):
@@ -2059,7 +2062,7 @@ class LATData(LLEData):
         if emax is None:
             emax = self.emax
 
-        return self._doLikelihood(xmlmodel, tsmin, emin, emax)
+        return self._doLikelihood(xmlmodel, tsmin, emin, emax, clul)
 
     pass
 
@@ -2070,6 +2073,7 @@ class LATData(LLEData):
         dogtdiffrsp = True
         emin = None
         emax = None
+        clul = 0.95
 
         for k, v in kwargs.iteritems():
             if (k == 'expomap'):
@@ -2082,6 +2086,8 @@ class LATData(LLEData):
                 emin = float(v)
             elif (k == 'emax' and v is not None):
                 emax = float(v)
+            elif(k == 'clul' and v is not None):
+                clul = float(v)
         pass
         self.getCuts()
         if (ltcube is None or ltcube == ''):
@@ -2119,18 +2125,18 @@ class LATData(LLEData):
         if emax is None:
             emax = self.emax
 
-        return self._doLikelihood(xmlmodel, tsmin, emin, emax)
+        return self._doLikelihood(xmlmodel, tsmin, emin, emax, clul)
 
     pass
 
-    def _doLikelihood(self, xmlmodel, tsmin, emin, emax):
+    def _doLikelihood(self, xmlmodel, tsmin, emin, emax, clul=0.95):
 
         outfilelike = "%s_likeRes.xml" % (self.rootName)
         
         sysErr = None
         statErr = None
         
-        if False:
+        if True:
         
             # Add a Gaussian prior for the GalacticTemplate component (it should be either the
             # isotropic template for Source class or the BKGE)
@@ -2145,8 +2151,8 @@ class LATData(LLEData):
     
             if (len(gal) == 0):
     
-                # No isotropic template
-                print("\nNo isotropic template found in the XML file!")
+                # No Galactic template
+                print("\nNo Galactic template found in the XML file!")
     
             else:
     
@@ -2165,7 +2171,7 @@ class LATData(LLEData):
     
                 else:
     
-                    total_error = 0.1
+                    total_error = 0.15
     
                     print("\nApplying a Gaussian prior with sigma %s on the normalization of the Galactic Template" % (
                     total_error))
@@ -2274,7 +2280,7 @@ class LATData(LLEData):
         pass
 
         printer = LikelihoodComponent.LikelihoodResultsPrinter(self.like1, emin, emax)
-        detectedSources = printer.niceXMLprint(outfilelike, tsmin, phIndex_beforeFit)
+        detectedSources = printer.niceXMLprint(outfilelike, tsmin, phIndex_beforeFit, clul)
         print("\nLog(likelihood) = %s" % (logL))
 
         self.logL = logL

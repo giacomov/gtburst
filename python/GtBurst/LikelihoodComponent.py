@@ -173,7 +173,7 @@ def IsotropicTemplateFunc(irf):
 
     spectrum = '''
    <spectrum file="%s" type="FileFunction">
-      <parameter free="1" max="15.0" min="0.1" name="Normalization" scale="1" value="1" />
+      <parameter free="1" max="10.0" min="0.1" name="Normalization" scale="1" value="1" />
    </spectrum>
     ''' % (findIsotropicTemplate(irf))
 
@@ -599,7 +599,7 @@ class LikelihoodResultsPrinter(object):
 
     pass
 
-    def niceXMLprint(self, inputxmlmodel, tsmin=20, phIndexForUL=-2.05):
+    def niceXMLprint(self, inputxmlmodel, tsmin=20, phIndexForUL=-2.05, clul=0.95):
         tree = ET.parse(inputxmlmodel)
         root = tree.getroot()
 
@@ -693,7 +693,7 @@ class LikelihoodResultsPrinter(object):
                     self.likelihoodObj.fit()
 
                     ulc = UpperLimits.UpperLimits(self.likelihoodObj)
-                    ul, integr = ulc[sourceName].bayesianUL(emin=self.emin, emax=self.emax, cl=0.95)
+                    ul, integr = ulc[sourceName].bayesianUL(emin=self.emin, emax=self.emax, cl=clul)
                     ule = ul * conv
                     flux = "< %8.3g" % (ule)
                     fluxError = 'n.a.'
@@ -768,8 +768,8 @@ class LikelihoodResultsPrinter(object):
             append("*** plus %s FGL sources with TS<1 (not printed to save space)" % (nNonPrinted))
         append(
             "*** All fluxes and upper limits have been computed in the %s - %s energy range." % (self.emin, self.emax))
-        append("*** Upper limits (if any) are computed assuming a photon index of %3.1f, with the 95 %s c.l." % (
-        phIndexForUL, '%'))
+        append("*** Upper limits (if any) are computed assuming a photon index of %3.1f, with the %s %s c.l." % (
+        phIndexForUL, clul * 100, '%'))
 
         print("\n".join(resultsStrings))
 
