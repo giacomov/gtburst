@@ -40,7 +40,7 @@ bad741125b99eac68c867864b43b1abb *python/GtBurst/commands/gtllebkgGUI.py
 e8b7102dc2ff59aa5d8b65cccf257b39 *python/GtBurst/commands/gtllesrcbindef.py
 aa0b472f87836e81f88e0c9d6bc44644 *python/GtBurst/commands/__init__.py
 3576f01d94460704cac9f5acfd4ffdfe *python/GtBurst/commands/gtdosimulation.py
-ad6bdb7db97535c10a0fadceb8632892 *python/GtBurst/version.py
+c2e7efc4631f07aa107df02438e52f62 *python/GtBurst/version.py
 30a8fa18fc8cde59cd514ac1b81d6a6a *python/GtBurst/getGBMfiles.py
 a5485ab6081caccd2149d4a4e78042f5 *python/GtBurst/dataHandling.py
 f163cb15a10d6fc518c40e0405db1f5c *python/GtBurst/IRFS.py
@@ -59,7 +59,7 @@ b2c8b18c137bc6f50e931d590c87d25b *python/GtBurst/xmlModelGUI.py
 7657b04d8fe9508a9105ea249224e74d *python/GtBurst/ConsoleText.py
 97b3f5bc6e894d54b92728d472be06fc *python/GtBurst/html2text.py
 b99f2004c1712d6bcd7254c71c925eb5 *python/GtBurst/FGLSelector.py
-17a30e8339e49757d741cddc4268bf40 *python/GtBurst/BayesianBlocks.py
+71de94ba772b482cff4d783d04f3137b *python/GtBurst/BayesianBlocks.py
 cef48ff8a4236cd2d9ceb5ecd897ebde *python/GtBurst/bkge.py
 618c3d4212e0a0d32f2f73a15215f309 *python/GtBurst/CommandPipeline.py
 6d5944d3b3d1d4aa96d3b957250d56b3 *python/GtBurst/statMethods.py
