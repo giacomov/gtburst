@@ -58,6 +58,8 @@ class Configuration(object):
         self.maxNumberOfCPUs            = self.configuration['maxNumberOfCPUs']
       except:
         #First time, or file corrupted. Create a configuration file with default values
+        print("Configuration file %s does not exist or is corrupted. Creating a new one" % self.configurationFile)
+        os.remove(self.configurationFile)
         self.configuration              = shelve.open(self.configurationFile,writeback=True)
         self.configuration['dataRepository'] = os.path.join(os.path.expanduser('~'),'FermiData')
         self.configuration['ftpWebsite']    = "ftp://legacy.gsfc.nasa.gov/fermi/data"
