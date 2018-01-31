@@ -40,7 +40,7 @@ bad741125b99eac68c867864b43b1abb *python/GtBurst/commands/gtllebkgGUI.py
 e8b7102dc2ff59aa5d8b65cccf257b39 *python/GtBurst/commands/gtllesrcbindef.py
 aa0b472f87836e81f88e0c9d6bc44644 *python/GtBurst/commands/__init__.py
 3576f01d94460704cac9f5acfd4ffdfe *python/GtBurst/commands/gtdosimulation.py
-c2e7efc4631f07aa107df02438e52f62 *python/GtBurst/version.py
+cae1ebf67733388a0d34d91332068fa9 *python/GtBurst/version.py
 30a8fa18fc8cde59cd514ac1b81d6a6a *python/GtBurst/getGBMfiles.py
 a5485ab6081caccd2149d4a4e78042f5 *python/GtBurst/dataHandling.py
 f163cb15a10d6fc518c40e0405db1f5c *python/GtBurst/IRFS.py
@@ -98,7 +98,7 @@ df52db65e01373dce5d31987a3b94b93 *python/GtBurst/aplpy/rgb.py
 af2a9eaa712bfae58e5affc83053b72b *python/GtBurst/aplpy/__init__.py
 c5bdd00cd620fece0642f9e99d487ae3 *python/GtBurst/EntryPoint.py
 5b46a42075462845f0c84b2865fe0486 *python/GtBurst/LikelihoodComponent.py
-505e94e5bc3bfc341932ee2d08c000cb *python/GtBurst/Configuration.py
+1cc812f7512b22d203c1bf15a2f0d983 *python/GtBurst/Configuration.py
 4c8ae3392072f374a7b0d205e0b72e08 *python/GtBurst/scripts/applyBayesianBlocks.py
 91c29594bc843156c707e612b9ea49d7 *python/GtBurst/scripts/doTimeResolvedLike.py
 fc9a726a45d107f1610e33fd3ce8cd6b *python/GtBurst/scripts/rawdata2package.py
