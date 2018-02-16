@@ -9,7 +9,7 @@ import md5
 import socket
 socket.setdefaulttimeout(60)
 
-remoteUrl = 'https://raw.githubusercontent.com/giacomov/gtburst/master/'
+remoteUrl = 'https://raw.githubusercontent.com/fermi-lat/pyBurstAnalysisGUI/master/'
 
 # Depending on whether this is a conda installation or not, we need to figure
 # out the path
